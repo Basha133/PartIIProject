@@ -3,6 +3,7 @@
 #include <utility>
 #include "assert_manager.h"
 #include "variable.h"
+#include "monotonic_variable.h"
 
 using namespace std;
 
@@ -55,11 +56,11 @@ Variable* AssertManager::makeVariable(string formatted_string) {
     pair<string, int> arg_num = getNextStringPart(formatted_string,':',assert_type.second+1);
     pair<string, int> inc_str = getNextStringPart(formatted_string,':',arg_num.second+1);
     inc = !inc_str.first.compare("1");
-    return new Variable(dist_monotonic, inc);
+    return new MonotonicVariable(inc);
   } else {
     printf("Unrecognised assertion type: %s\n", assert_type.first.c_str());
   }
-  return new Variable(dist_monotonic, true);
+  return new Variable(dist_monotonic);
 }
 
 void AssertManager::newValue(string formatted_string, int value) {
@@ -72,4 +73,7 @@ void AssertManager::newValue(string formatted_string, int value) {
   }
 
   AssertManager::instrumented_variables[var_key]->newValue(value);
+  if (!AssertManager::instrumented_variables[var_key]->isOk()) {
+    printf("Assertion failed!\n");
+  }
 }

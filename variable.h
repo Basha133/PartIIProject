@@ -8,15 +8,12 @@ enum distribution {
 };
 
 class Variable {
- private:
+ protected:
   distribution dist;
-  bool inc;
-  int window_size;
-  std::deque<int> values;
  public:
-  void newValue(int);
-  bool isOk();
-  Variable(distribution dist, bool inc);
+  virtual void newValue(int);
+  virtual bool isOk();
+  Variable(distribution dist);
 };
 
 #endif
