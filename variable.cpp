@@ -11,7 +11,7 @@ bool Variable::isOk() {
   return false;
 }
 
-void Variable::newValue(int x) {
+void Variable::newValue(const string& formatted_string, int x) {
   printf("Variable warning: Default newValue used!\n");
 }
 

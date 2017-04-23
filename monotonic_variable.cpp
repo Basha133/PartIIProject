@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <string>
 #include "monotonic_variable.h"
 
 using namespace std;
@@ -14,7 +15,7 @@ bool MonotonicVariable::isOk() {
   return ok;
 }
 
-void MonotonicVariable::newValue(int x) {
+void MonotonicVariable::newValue(const string& formatted_string, int x) {
   if (!initialised) {
     initialised = true;
     last_value = x;

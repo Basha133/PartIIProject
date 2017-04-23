@@ -11,7 +11,7 @@ class MonotonicVariable : public Variable {
   bool initialised;
   bool ok;
  public:
-  void newValue(int);
+  void newValue(const std::string& formatted_string, int);
   bool isOk();
   MonotonicVariable(bool inc);
 };
