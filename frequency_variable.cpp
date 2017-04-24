@@ -32,18 +32,19 @@ bool FrequencyVariable::isOk() {
 }
 
 void FrequencyVariable::newValue(const string& formatted_string, int x) {
-  vector<pair<int,int> > string_parts = Util::getStringParts(formatted_string, ':');
+  vector<pair<int,int> > parts = Util::getStringParts(formatted_string, ':');
   //value_name, ta_assert, assert_type, group_str, (opt from here) freq_str, more_than_str, window_size_str
-  string value_name = formatted_string.substr(string_parts[0].first, string_parts[0].second); 
+  string value_name = Util::partSubstring(formatted_string, parts[0]); 
+  pair<int, int> assert_type = parts[2];
 
   if (!initialised) {
-    if (!formatted_string.compare(string_parts[2].first, string_parts[2].second, "call_freq")) {
-      string freq_str = formatted_string.substr(string_parts[4].first, string_parts[4].second);
-      string window_size_str = formatted_string.substr(string_parts[6].first, string_parts[6].second);
+    if (Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
+      string freq_str = Util::partSubstring(formatted_string, parts[4]);
+      string window_size_str = Util::partSubstring(formatted_string, parts[6]);
       desired_call = value_name;
       //std::string::size_type sz; - could be used for stof add stoi
       freq = (float) atof(freq_str.c_str());
-      more_than = !formatted_string.compare(string_parts[5].first, string_parts[5].second, "1");
+      more_than = Util::partStringEqual(formatted_string, parts[5], "1");
       window_size = atoi(window_size_str.c_str());
       initialised = true;
       printf("freq_var initialised: freq:%f more_than:%d window_size:%d\n", freq, more_than, window_size);

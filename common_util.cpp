@@ -30,3 +30,11 @@ vector<pair<int,int> > Util::getStringParts(const string& formatted_string, char
   res.push_back(make_pair(last_i+1, i-last_i-1));
   return res;
 }
+
+bool Util::partStringEqual(const string& formatted_string, pair<int,int> start_len_pair, const string compare_to) {
+  return !formatted_string.compare(start_len_pair.first, start_len_pair.second, compare_to);
+}
+
+string Util::partSubstring(const string& formatted_string, pair<int,int> start_len_pair) {
+  return formatted_string.substr(start_len_pair.first, start_len_pair.second);
+}
