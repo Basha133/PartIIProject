@@ -68,12 +68,13 @@ struct Hello : public ModulePass {
       }
     }
     
-    map<Value*, DbgDeclareInst*> value_to_dbg_dec;
+    //Part prepared for variable annotation below, which ended up not being used
+    /*map<Value*, DbgDeclareInst*> value_to_dbg_dec;
     bool vars_instrumented = false;
 
     for (auto cur_f = M.getFunctionList().begin(),
          end_f = M.getFunctionList().end();
-	 cur_f != end_f; ++cur_f) {
+         cur_f != end_f; ++cur_f) {
       errs() << "HelloAnnot: going over " << cur_f->getName() << "\n";
       for (auto cur_b = cur_f->getBasicBlockList().begin(),
            end_b = cur_f->getBasicBlockList().end();
@@ -81,43 +82,43 @@ struct Hello : public ModulePass {
         for (auto cur_i = cur_b->getInstList().begin(),
              end_i = cur_b->getInstList().end();
              cur_i != end_i; ++cur_i) {
-	  if (auto cur_dbg_dec = dyn_cast<DbgDeclareInst>(cur_i)) {
-	    errs() << "Found declaration: "
-		<< cur_dbg_dec->getVariable()->getName().str()
-		<< " on address " << (void*) cur_dbg_dec->getAddress() << "\n";
-	    value_to_dbg_dec[cur_dbg_dec->getAddress()] = cur_dbg_dec;
-	  }
+          if (auto cur_dbg_dec = dyn_cast<DbgDeclareInst>(cur_i)) {
+            errs() << "Found declaration: "
+              << cur_dbg_dec->getVariable()->getName().str()
+              << " on address " << (void*) cur_dbg_dec->getAddress() << "\n";
+            value_to_dbg_dec[cur_dbg_dec->getAddress()] = cur_dbg_dec;
+          }
           if (auto cur_call = dyn_cast<CallInst>(cur_i)) {
             errs() << "Found a call: ";
             errs() << cur_call->getCalledFunction()->getName() << "\n";
-	    if (cur_call->getCalledFunction()->getName() == "llvm.var.annotation") {
-	      errs() << "Found annotation on value " << (void*) cur_call->getArgOperand(0)->stripPointerCasts() << "\n";
-	      if (value_to_dbg_dec.find(cur_call->getArgOperand(0)->stripPointerCasts()) != value_to_dbg_dec.end()) {
+            if (cur_call->getCalledFunction()->getName() == "llvm.var.annotation") {
+              errs() << "Found annotation on value " << (void*) cur_call->getArgOperand(0)->stripPointerCasts() << "\n";
+              if (value_to_dbg_dec.find(cur_call->getArgOperand(0)->stripPointerCasts()) != value_to_dbg_dec.end()) {
                 errs() << "Should annotate " << value_to_dbg_dec[cur_call->getArgOperand(0)->stripPointerCasts()]->getVariable()->getName().str() << "\n";
-		if (auto gv = dyn_cast<ConstantExpr>(cur_call->getArgOperand(1))) {
-		  string std_anno = cast<ConstantDataArray>(cast<GlobalVariable>(cast<ConstantExpr>(gv)->getOperand(0))->getInitializer())->getAsCString();
-		  /*if (std_anno.compare(0, ta_prefix.length(), ta_prefix) == 0) {
-            	    if (!vars_instrumented) {
-		      loom_inst_policy << "structures:\n"
-		      vars_instrumented = true;
-		    }
-            	    fn->addFnAttr(ta_instrument_anno);
-            	    fn->addFnAttr(anno);
-	  	  }*/
-		  errs() << "with " << std_anno << "\n";
-		}
-	      }
-	      /*for (unsigned int i=0; i<cur_call->getNumArgOperands(); i++) {
-		Value *op = cur_call->getArgOperand(i);
-		errs() << " " << (op->hasName()? op->getName().str() : "noname"); 
-	      }*/
-	      errs() << "\n";
-	    }
+                if (auto gv = dyn_cast<ConstantExpr>(cur_call->getArgOperand(1))) {
+                  string std_anno = cast<ConstantDataArray>(cast<GlobalVariable>(cast<ConstantExpr>(gv)->getOperand(0))->getInitializer())->getAsCString();
+                  //if (std_anno.compare(0, ta_prefix.length(), ta_prefix) == 0) {
+                  //            if (!vars_instrumented) {
+                  //    loom_inst_policy << "structures:\n"
+                  //    vars_instrumented = true;
+                  //  }
+                  //            fn->addFnAttr(ta_instrument_anno);
+                  //            fn->addFnAttr(anno);
+                  //  }
+                  errs() << "with " << std_anno << "\n";
+                }
+              }
+              //for (unsigned int i=0; i<cur_call->getNumArgOperands(); i++) {
+              //    Value *op = cur_call->getArgOperand(i);
+              //    errs() << " " << (op->hasName()? op->getName().str() : "noname"); 
+              //}
+              errs() << "\n";
+            }
           }
           //errs() << cur_i->getOpcodeName() << "\n";
         }
       }
-    }
+    }*/
 
     //errs() << "HelloAnnot: ";
     //errs().write_escaped(F.getName()) << '\n';
