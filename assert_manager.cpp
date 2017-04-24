@@ -16,46 +16,41 @@ AssertManager::AssertManager() {
 }
 
 string AssertManager::getVariableKey(string formatted_string) {
-  pair<string, int> name_part = Util::getNextStringPart(formatted_string, ':', 0);
-  string res = name_part.first;
+  vector<pair<int,int> > string_parts = Util::getStringParts(formatted_string, ':');
+  //name_part, ta_const, assert_type, (opt) group_name/arg__num
 
-  pair<string, int> ta_const = Util::getNextStringPart(formatted_string,':',name_part.second+1);
-  if (ta_const.first.compare("TA_ASSERT")) {
+  string res = formatted_string.substr(string_parts[0].first, string_parts[0].second);
+
+  if (formatted_string.compare(string_parts[1].first, string_parts[1].second, "TA_ASSERT")) {
     printf("Weird format received!\n");
   }
 
-  pair<string, int> assert_type = Util::getNextStringPart(formatted_string,':',ta_const.second+1);
-  if (!assert_type.first.compare("arg_monotonic")) {
-    pair<string, int> arg_num = Util::getNextStringPart(formatted_string,':',assert_type.second+1);
+  if (!formatted_string.compare(string_parts[2].first, string_parts[2].second, "arg_monotonic")) {
     res += ":";
-    res += arg_num.first;
-  } else if (!assert_type.first.compare("group") || !assert_type.first.compare("call_freq")) {
-    pair<string, int> group_name = Util::getNextStringPart(formatted_string,':',assert_type.second+1);
-    res = group_name.first;
+    res += formatted_string.substr(string_parts[3].first, string_parts[3].second);
+  } else if (!formatted_string.compare(string_parts[2].first, string_parts[2].second, "group") || !formatted_string.compare(string_parts[2].first, string_parts[2].second, "call_freq")) {
+    res = formatted_string.substr(string_parts[3].first, string_parts[3].second);
   } else {
-    printf("Unrecognised assertion type: %s\n", assert_type.first.c_str());
+    printf("Unrecognised assertion type: %s\n", formatted_string.substr(string_parts[2].first, string_parts[2].second).c_str());
   }
 
   return res;
 }
 
 Variable* AssertManager::makeVariable(string formatted_string) {
-  pair<string, int> name_part = Util::getNextStringPart(formatted_string, ':', 0);
-  pair<string, int> ta_const = Util::getNextStringPart(formatted_string,':',name_part.second+1);
-  pair<string, int> assert_type = Util::getNextStringPart(formatted_string,':',ta_const.second+1);
+  vector<pair<int,int> > string_parts = Util::getStringParts(formatted_string, ':');
+  //name_part, ta_const, assert_type, (opt) group_name/arg__num, (opt) inc
 
-  if (!assert_type.first.compare("arg_monotonic")) {
+  if (!formatted_string.compare(string_parts[2].first, string_parts[2].second, "arg_monotonic")) {
     printf("makeVariable: new MonotonicVariable.\n");
     bool inc;
-    pair<string, int> arg_num = Util::getNextStringPart(formatted_string,':',assert_type.second+1);
-    pair<string, int> inc_str = Util::getNextStringPart(formatted_string,':',arg_num.second+1);
-    inc = !inc_str.first.compare("1");
+    inc = !formatted_string.compare(string_parts[4].first, string_parts[4].second, "1");
     return new MonotonicVariable(inc);
-  } else if (!assert_type.first.compare("group") || !assert_type.first.compare("call_freq")) {
+  } else if (!formatted_string.compare(string_parts[2].first, string_parts[2].second, "group") || !formatted_string.compare(string_parts[2].first, string_parts[2].second, "call_freq")) {
     printf("makeVariable: new FrequencyVariable.\n");
     return new FrequencyVariable();
   } else {
-    printf("Unrecognised assertion type: %s\n", assert_type.first.c_str());
+    printf("Unrecognised assertion type: %s\n", formatted_string.substr(string_parts[2].first, string_parts[2].second).c_str());
   }
   return new Variable(dist_monotonic);
 }

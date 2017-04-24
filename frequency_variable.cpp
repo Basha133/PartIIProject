@@ -32,30 +32,27 @@ bool FrequencyVariable::isOk() {
 }
 
 void FrequencyVariable::newValue(const string& formatted_string, int x) {
-  pair<string,int> value_name = Util::getNextStringPart(formatted_string, ':', 0);
-  pair<string,int> ta_assert = Util::getNextStringPart(formatted_string, ':', value_name.second+1);
-  pair<string,int> assert_type = Util::getNextStringPart(formatted_string, ':', ta_assert.second+1);
+  vector<pair<int,int> > string_parts = Util::getStringParts(formatted_string, ':');
+  //value_name, ta_assert, assert_type, group_str, (opt from here) freq_str, more_than_str, window_size_str
+  string value_name = formatted_string.substr(string_parts[0].first, string_parts[0].second); 
 
   if (!initialised) {
-    if (!assert_type.first.compare("call_freq")) {
-      pair<string,int> group_str = Util::getNextStringPart(formatted_string, ':', assert_type.second+1);
-      pair<string,int> freq_str = Util::getNextStringPart(formatted_string, ':', group_str.second+1);
-      pair<string,int> more_than_str = Util::getNextStringPart(formatted_string, ':', freq_str.second+1);
-      pair<string,int> window_size_str = Util::getNextStringPart(formatted_string, ':', more_than_str.second+1);
-      //printf("freq_str:%s more_than_str:%s window_size_str:%s\n",freq_str.first.c_str(), more_than_str.first.c_str(), window_size_str.first.c_str());
-      desired_call = value_name.first;
+    if (!formatted_string.compare(string_parts[2].first, string_parts[2].second, "call_freq")) {
+      string freq_str = formatted_string.substr(string_parts[4].first, string_parts[4].second);
+      string window_size_str = formatted_string.substr(string_parts[6].first, string_parts[6].second);
+      desired_call = value_name;
       //std::string::size_type sz; - could be used for stof add stoi
-      freq = (float) atof(freq_str.first.c_str());
-      more_than = !more_than_str.first.compare("1");
-      window_size = atoi(window_size_str.first.c_str());
+      freq = (float) atof(freq_str.c_str());
+      more_than = !formatted_string.compare(string_parts[5].first, string_parts[5].second, "1");
+      window_size = atoi(window_size_str.c_str());
       initialised = true;
       printf("freq_var initialised: freq:%f more_than:%d window_size:%d\n", freq, more_than, window_size);
     }
-    values.push_back(getIdFromName(value_name.first));
+    values.push_back(getIdFromName(value_name));
     return;
   }
   
-  int curr_id = getIdFromName(value_name.first);
+  int curr_id = getIdFromName(value_name);
   values.push_back(curr_id);
   if (curr_id == 0) {
     running_count++;
