@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <pmc.h>
-#include "ta_macros.h"
+#include "../ta_macros.h"
 #include "../assert_manager_clib.h"
 
 void foo(int x) TA_ARG_MONOTONIC(0, 1) {
