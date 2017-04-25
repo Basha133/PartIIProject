@@ -31,6 +31,17 @@ bool FrequencyVariable::isOk() {
   return ok;
 }
 
+string FrequencyVariable::getStatusMessage() {
+  if (ok) {
+    return "OK";
+  }
+  string res = string("Should have frequency of calls to ")
+    + desired_call + " " + (more_than?"more than ":"less than ")
+    + to_string(freq) + " but actually has frequency "
+    + to_string(((float)running_count/(float)window_size));
+  return res;
+}
+
 void FrequencyVariable::newValue(const string& formatted_string, int x) {
   vector<pair<int,int> > parts = Util::getStringParts(formatted_string, ':');
   //value_name, ta_assert, assert_type, group_str, (opt from here) freq_str, more_than_str, window_size_str
@@ -68,6 +79,7 @@ void FrequencyVariable::newValue(const string& formatted_string, int x) {
       if (pop_value == 0) {
         running_count--;
       }
+      printf("current freq: %f\n", ((float)running_count/(float)window_size));
       ok  = (((float)running_count/(float)window_size) > freq);
       if (!more_than) {
         ok = !ok;

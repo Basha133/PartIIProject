@@ -3,6 +3,7 @@
 #include <utility>
 #include "assert_manager.h"
 #include "variable.h"
+#include "output_logger.h"
 #include "frequency_variable.h"
 #include "monotonic_variable.h"
 #include "common_util.h"
@@ -63,6 +64,7 @@ Variable* AssertManager::makeVariable(string formatted_string) {
 void AssertManager::newValue(string formatted_string, int value) {
   string var_key = AssertManager::getVariableKey(formatted_string);
   printf("I got a new value! %s: %d\n",var_key.c_str(), value);
+  OutputLogger::newValue(var_key, value);
 
   if (AssertManager::instrumented_variables.find(var_key) == AssertManager::instrumented_variables.end()) {
     printf("Variable seen for the first time, calling makeVariable.\n");
@@ -72,5 +74,6 @@ void AssertManager::newValue(string formatted_string, int value) {
   AssertManager::instrumented_variables[var_key]->newValue(formatted_string, value);
   if (!AssertManager::instrumented_variables[var_key]->isOk()) {
     printf("Assertion failed!\n");
+    OutputLogger::failedAssertion(var_key, AssertManager::instrumented_variables[var_key]);
   }
 }

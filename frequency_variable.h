@@ -24,6 +24,7 @@ class FrequencyVariable : public Variable {
  public:
   void newValue(const std::string& formatted_string, int);
   bool isOk();
+  std::string getStatusMessage();
   FrequencyVariable();
 };
 

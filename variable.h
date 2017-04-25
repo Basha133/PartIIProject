@@ -15,6 +15,7 @@ class Variable {
  public:
   virtual void newValue(const std::string& formatted_string, int);
   virtual bool isOk();
+  virtual std::string getStatusMessage();
   Variable(distribution dist);
 };
 

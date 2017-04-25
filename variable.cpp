@@ -15,3 +15,7 @@ void Variable::newValue(const string& formatted_string, int x) {
   printf("Variable warning: Default newValue used!\n");
 }
 
+string Variable::getStatusMessage() {
+  return "(missing status message)";
+}
+
