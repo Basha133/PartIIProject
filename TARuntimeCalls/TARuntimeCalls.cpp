@@ -42,6 +42,17 @@ int getArgNumFromFormat(string formatted_string) {
   return -1;
 }
 
+//Neater version with linking issues
+/*int getArgNumFromFormat(string formatted_string) {
+  vector<pair<int, int> > parts = Util::getStringParts(formatted_string, ':');
+  //ta_const, assert_type, (opt) arg_num
+  if (Util::partStringEqual(formatted_string, parts[1], "arg_monotonic")) {
+    string arg_num = Util::partSubstring(formatted_string, parts[2]);
+    return stoi(arg_num);
+  } 
+  return -1;
+}*/
+
 struct TARuntimeCalls : public ModulePass {
   static char ID;
   TARuntimeCalls() : ModulePass(ID) {}
@@ -108,8 +119,6 @@ struct TARuntimeCalls : public ModulePass {
         
         builder.CreateCall(newValue_fun, fun_args);
         builder.CreateRetVoid();
-        //loom_inst_policy << "    - name: " << cur_fref->getName().str() << "\n";
-        //loom_inst_policy << "      caller: [ entry ]" << "\n";
       }
     }
     

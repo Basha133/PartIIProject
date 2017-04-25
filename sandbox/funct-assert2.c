@@ -6,7 +6,7 @@ void foo(int x) TA_ARG_MONOTONIC(0, 1) {
   printf("foo does something%d\n",x);
 }
 
-void bar() /*TA_CALL_GROUP("group_a")*/ {
+void bar() {
   printf("bar does something\n");
 }
 

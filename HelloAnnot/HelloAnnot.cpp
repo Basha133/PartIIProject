@@ -14,6 +14,54 @@ using namespace llvm;
 using namespace std;
 
 namespace {
+
+//local copy while linking issues are resolved
+vector<pair<int,int> > getStringParts(const string& formatted_string, char delim) {
+  vector<pair<int,int> > res;
+  int i, last_i;
+  last_i = -1;
+  for (i=0; i<formatted_string.length(); i++) {
+    if (formatted_string[i] == delim) {
+      res.push_back(make_pair(last_i+1, i-last_i-1));
+      last_i = i;
+    }
+  }
+  res.push_back(make_pair(last_i+1, i-last_i-1));
+  return res;
+}
+
+bool partStringEqual(const string& formatted_string, pair<int,int> start_len_pair, const string compare_to) {
+  return !formatted_string.compare(start_len_pair.first, start_len_pair.second, compare_to);
+}
+
+string partSubstring(const string& formatted_string, pair<int,int> start_len_pair) {
+  return formatted_string.substr(start_len_pair.first, start_len_pair.second);
+}
+//end of local copy
+
+bool isGroup(const string& formatted_string) {
+  vector<pair<int, int> > parts = getStringParts(formatted_string, ':');
+  return partStringEqual(formatted_string, parts[1], "group");
+}
+
+bool isFunctionFreq(const string& formatted_string) {
+  vector<pair<int, int> > parts = getStringParts(formatted_string, ':');
+  return partStringEqual(formatted_string, parts[1], "call_freq");
+}
+
+string getGroupName(const string& formatted_string) {
+  vector<pair<int, int> > parts = getStringParts(formatted_string, ':');
+  return partSubstring(formatted_string, parts[2]);
+}
+
+string getFunctFreqParams(const string& formatted_string) {
+  vector<pair<int, int> > parts = getStringParts(formatted_string, ':');
+  if (parts.size() < 4) {
+    errs() << "HelloAnnot: " << "Function frequency annotation expected, but not received.\n";
+  }
+  return formatted_string.substr(parts[3].first);
+}
+
 struct Hello : public ModulePass {
   static char ID;
   Hello() : ModulePass(ID) {}
@@ -33,6 +81,8 @@ struct Hello : public ModulePass {
     string ta_instrument_anno = "TA_INSTRUMENT";
     bool functions_instrumented = false;
     
+    map<string, string> group_to_param;
+
     //Look through global constants to look for function annotations
     auto global_annos = M.getNamedGlobal("llvm.global.annotations");
     if (global_annos) {
@@ -46,11 +96,39 @@ struct Hello : public ModulePass {
       	  //Check whether it starts with our prefix
       	  string std_anno = anno.str();
       	  if (std_anno.compare(0, ta_prefix.length(), ta_prefix) == 0) {
-                  functions_instrumented = true;    
-                  fn->addFnAttr(ta_instrument_anno, anno);
-      	  }
-      	}
+            functions_instrumented = true;
+            if (isGroup(std_anno)) {
+              //Skip, since we lack information contained in function_freq
+            } else {
+              if (isFunctionFreq(std_anno)) {
+                errs() << "HelloAnnot: found call_freq: " << getFunctFreqParams(std_anno) << "\n";
+                group_to_param[getGroupName(std_anno)] = getFunctFreqParams(std_anno);
+              }
+              fn->addFnAttr(ta_instrument_anno, anno);
+            }
+          }
+        }
       }
+      
+      for (unsigned int i=0; i<a->getNumOperands(); i++) {
+	      auto e = cast<ConstantStruct>(a->getOperand(i));
+      	if (auto fn = dyn_cast<Function>(e->getOperand(0)->getOperand(0))) {
+          auto anno = cast<ConstantDataArray>(cast<GlobalVariable>(
+      	  e->getOperand(1)->getOperand(0))->getOperand(0))->getAsCString();
+
+      	  //Look for the group annotations we skipped the first time
+      	  string std_anno = anno.str();
+      	  if (std_anno.compare(0, ta_prefix.length(), ta_prefix) == 0) {
+            if (isGroup(std_anno)) {
+              string enhanced_anno = std_anno + ":" + group_to_param[getGroupName(std_anno)];
+              errs() << "HelloAnnot: enhanced_anno: " << enhanced_anno << "\n";
+              StringRef enhanced_anno_ref(enhanced_anno);
+              fn->addFnAttr(ta_instrument_anno, enhanced_anno_ref);
+            }
+          }
+        }
+      }
+
     }
     if (functions_instrumented) {
         loom_inst_policy << "functions:\n";

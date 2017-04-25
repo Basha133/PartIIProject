@@ -38,7 +38,9 @@ void FrequencyVariable::newValue(const string& formatted_string, int x) {
   pair<int, int> assert_type = parts[2];
 
   if (!initialised) {
-    if (Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
+    //Now should be okay even if group annotation is first
+    //if (Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
+      printf("Initialising frequency variable - full formatted string: %s\n", formatted_string.c_str());
       string freq_str = Util::partSubstring(formatted_string, parts[4]);
       string window_size_str = Util::partSubstring(formatted_string, parts[6]);
       desired_call = value_name;
@@ -48,7 +50,7 @@ void FrequencyVariable::newValue(const string& formatted_string, int x) {
       window_size = atoi(window_size_str.c_str());
       initialised = true;
       printf("freq_var initialised: freq:%f more_than:%d window_size:%d\n", freq, more_than, window_size);
-    }
+    //}
     values.push_back(getIdFromName(value_name));
     return;
   }
