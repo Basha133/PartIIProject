@@ -47,13 +47,13 @@ Variable* AssertManager::makeVariable(string formatted_string) {
   pair<int, int> assert_type = parts[2];
   
   if (Util::partStringEqual(formatted_string, assert_type, "arg_monotonic")) {
-    printf("makeVariable: new MonotonicVariable.\n");
+    //printf("makeVariable: new MonotonicVariable.\n");
     bool inc;
     pair<int, int> inc_str = parts[4];
     inc = Util::partStringEqual(formatted_string, inc_str, "1");
     return new MonotonicVariable(inc);
   } else if (Util::partStringEqual(formatted_string, assert_type, "group") || Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
-    printf("makeVariable: new FrequencyVariable.\n");
+    //printf("makeVariable: new FrequencyVariable.\n");
     return new FrequencyVariable();
   } else {
     printf("Unrecognised assertion type: %s\n", Util::partSubstring(formatted_string, assert_type).c_str());
@@ -63,17 +63,17 @@ Variable* AssertManager::makeVariable(string formatted_string) {
 
 void AssertManager::newValue(string formatted_string, int value) {
   string var_key = AssertManager::getVariableKey(formatted_string);
-  printf("I got a new value! %s: %d\n",var_key.c_str(), value);
+  //printf("I got a new value! %s: %d\n",var_key.c_str(), value);
   OutputLogger::newValue(var_key, value);
 
   if (AssertManager::instrumented_variables.find(var_key) == AssertManager::instrumented_variables.end()) {
-    printf("Variable seen for the first time, calling makeVariable.\n");
+    //printf("Variable seen for the first time, calling makeVariable.\n");
     AssertManager::instrumented_variables.insert(make_pair(var_key, AssertManager::makeVariable(formatted_string) )); 
   }
 
   AssertManager::instrumented_variables[var_key]->newValue(formatted_string, value);
   if (!AssertManager::instrumented_variables[var_key]->isOk()) {
-    printf("Assertion failed!\n");
+    //printf("Assertion failed!\n");
     OutputLogger::failedAssertion(var_key, AssertManager::instrumented_variables[var_key]);
   }
 }

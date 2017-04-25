@@ -8,7 +8,7 @@
 
 using namespace std;
 
-bool output_verbose = true;
+bool output_verbose = false;
 bool fail_assertion = true;
 bool fail_silently = false;
 
