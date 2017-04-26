@@ -53,8 +53,7 @@ void FrequencyVariable::newValue(const string& formatted_string, int x) {
   }
 
   if (!initialised) {
-    //Now should be okay even if group annotation is first
-    printf("Initialising frequency variable - full formatted string: %s\n", formatted_string.c_str());
+    //printf("Initialising frequency variable - full formatted string: %s\n", formatted_string.c_str());
     string freq_str = Util::partSubstring(formatted_string, parts[4]);
     string window_size_str = Util::partSubstring(formatted_string, parts[6]);
     //std::string::size_type sz; - could be used for stof add stoi
@@ -62,10 +61,7 @@ void FrequencyVariable::newValue(const string& formatted_string, int x) {
     more_than = Util::partStringEqual(formatted_string, parts[5], "1");
     window_size = atoi(window_size_str.c_str());
     initialised = true;
-    printf("freq_var initialised: freq:%f more_than:%d window_size:%d\n", freq, more_than, window_size);
-    
-    //values.push_back(getIdFromName(value_name));
-    //return;
+    //printf("freq_var initialised: freq:%f more_than:%d window_size:%d\n", freq, more_than, window_size);
   }
   
   int curr_id = getIdFromName(value_name);
@@ -75,20 +71,18 @@ void FrequencyVariable::newValue(const string& formatted_string, int x) {
   }
   
   //Should be initialised anyway
-  //if (initialised) {
-    if (values.size() >= window_size) {
-      if (values.size() > window_size) {
-        int pop_value = values.front();
-        values.pop_front();
-        if (pop_value == 0) {
-          running_count--;
-        }
-      }
-      printf("current freq: %f\n", ((float)running_count/(float)window_size));
-      ok  = (((float)running_count/(float)window_size) > freq);
-      if (!more_than) {
-        ok = !ok;
+  if (values.size() >= window_size) {
+    if (values.size() > window_size) {
+      int pop_value = values.front();
+      values.pop_front();
+      if (pop_value == 0) {
+        running_count--;
       }
     }
-  //}
+    //printf("current freq: %f\n", ((float)running_count/(float)window_size));
+    ok  = (((float)running_count/(float)window_size) > freq);
+    if (!more_than) {
+      ok = !ok;
+    }
+  }
 }

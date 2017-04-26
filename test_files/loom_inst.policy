@@ -3,3 +3,8 @@ hook_prefix: __loom
 logging: none
 
 
+functions:
+    - name: foo
+      caller: [ entry ]
+    - name: bar
+      caller: [ entry ]
