@@ -6,7 +6,8 @@
 
 enum distribution {
   dist_monotonic = 0,
-  dist_freq = 1
+  dist_freq = 1,
+  dist_uniform = 2
 };
 
 class Variable {

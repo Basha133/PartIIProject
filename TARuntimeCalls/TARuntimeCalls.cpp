@@ -33,11 +33,9 @@ int getArgNumFromFormat(string formatted_string) {
   pair<string, int> ta_const = getNextStringPart(formatted_string,':',0);
   pair<string, int> assert_type = getNextStringPart(formatted_string,':',ta_const.second+1);
 
-  if (!assert_type.first.compare("arg_monotonic")) {
+  if (!assert_type.first.compare("arg_monotonic") || !assert_type.first.compare("arg_uniform")) {
     pair<string, int> arg_num = getNextStringPart(formatted_string,':',assert_type.second+1);
     return stoi(arg_num.first);
-  } else {
-    printf("Unrecognised assertion type: %s\n", assert_type.first.c_str());
   }
   return -1;
 }

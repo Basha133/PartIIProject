@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cstdlib>
 #include <string>
 #include <utility>
 #include "assert_manager.h"
@@ -6,6 +7,7 @@
 #include "output_logger.h"
 #include "frequency_variable.h"
 #include "monotonic_variable.h"
+#include "uniform_variable.h"
 #include "common_util.h"
 
 using namespace std;
@@ -29,7 +31,7 @@ string AssertManager::getVariableKey(string formatted_string) {
     printf("Weird format received! %s instead of TA_ASSERT\n", Util::partSubstring(formatted_string, ta_const).c_str());
   }
 
-  if (Util::partStringEqual(formatted_string, assert_type, "arg_monotonic")) {
+  if (Util::partStringEqual(formatted_string, assert_type, "arg_monotonic") || Util::partStringEqual(formatted_string, assert_type, "arg_uniform")) {
     res += ":";
     res += Util::partSubstring(formatted_string, parts[3]);
   } else if (Util::partStringEqual(formatted_string, assert_type, "group") || Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
@@ -55,6 +57,15 @@ Variable* AssertManager::makeVariable(string formatted_string) {
   } else if (Util::partStringEqual(formatted_string, assert_type, "group") || Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
     //printf("makeVariable: new FrequencyVariable.\n");
     return new FrequencyVariable();
+  } if (Util::partStringEqual(formatted_string, assert_type, "arg_uniform")) {
+    printf("makeVariable: new UniformVariable.\n");
+    string min_str = Util::partSubstring(formatted_string, parts[4]);
+    string max_str = Util::partSubstring(formatted_string, parts[5]);
+    string window_size_str = Util::partSubstring(formatted_string, parts[6]);
+    int min_val = atoi(min_str.c_str());
+    int max_val  = atoi(max_str.c_str());
+    int window_size = atoi(window_size_str.c_str());
+    return new UniformVariable(min_val, max_val, window_size);
   } else {
     printf("Unrecognised assertion type: %s\n", Util::partSubstring(formatted_string, assert_type).c_str());
   }

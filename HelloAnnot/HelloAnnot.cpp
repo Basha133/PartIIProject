@@ -208,6 +208,6 @@ struct Hello : public ModulePass {
 }  // end of anonymous namespace
 
 char Hello::ID = 0;
-static RegisterPass<Hello> X("hello_annot", "Hello World Pass",
+static RegisterPass<Hello> X("hello_annot", "Generates policies fro Loom and adds som annotations",
                              false /* Only looks at CFG */,
                              false /* Analysis Pass */);

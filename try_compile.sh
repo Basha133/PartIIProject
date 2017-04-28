@@ -1,6 +1,6 @@
 #!/bin/sh
 
-clang -L. -Wl,-rpath=. -lassert_manager_clib -o funct_test funct-freq-final.o
+clang -L. -Wl,-rpath=. -lassert_manager_clib -o ${1} ${1}-final.o
 
-./funct_test
+./${1}
 

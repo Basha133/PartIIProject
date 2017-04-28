@@ -1,4 +1,3 @@
 strategy: callout
 hook_prefix: __loom
-logging: printf
 
