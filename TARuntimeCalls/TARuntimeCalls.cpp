@@ -58,6 +58,7 @@ struct TARuntimeCalls : public ModulePass {
   bool runOnModule(Module &M) override {
     string ta_prefix = "TA_ASSERT";
     string ta_instrument_anno = "TA_INSTRUMENT";
+    string ta_instrument_exit_anno = "TA_INSTRUMENT_EXIT";
     StringRef ta_inst_anno_ref = StringRef(ta_instrument_anno);
     
     //Manage function annotations - generate calls to assertion manager
@@ -70,8 +71,8 @@ struct TARuntimeCalls : public ModulePass {
         string loom_fun_name = "__loom_call_" + cur_f->getName().str();
         Function *loom_f = M.getFunction(loom_fun_name);
         
-        //Remove return from the generated function - we should add our instructions
-        //in its place
+        //Remove return from the generated function - we should add
+	      //our instructions in its place
         BasicBlock &entry_block = loom_f->getEntryBlock();
         Instruction &last_inst = entry_block.back();
         last_inst.eraseFromParent();
@@ -91,7 +92,6 @@ struct TARuntimeCalls : public ModulePass {
         //Value *hello_str = builder.CreateGlobalStringPtr("Instrumentation in action! \n");
         //Value *hello_str = builder.CreateGlobalStringPtr(cur_f->getName().str());
         
-
         Attribute form_att = cur_f->getFnAttribute(ta_inst_anno_ref);
         Value *hello_str = builder.CreateGlobalStringPtr(cur_f->getName().str() + ":" + form_att.getValueAsString().str());
 
@@ -114,6 +114,39 @@ struct TARuntimeCalls : public ModulePass {
         //Constant *printfFunc = M.getFunction("printf");
         //builder.CreateCall(printfFunc, fun_args);
         //Constant *assert_manager_call = M.getFunction("AssertManager_newValue");
+        
+        builder.CreateCall(newValue_fun, fun_args);
+        builder.CreateRetVoid();
+      }
+      if (cur_f->hasFnAttribute(ta_instrument_exit_anno)) {
+        errs() << "RuntimeCalls: " << cur_f->getName() << " exit\n";
+        string loom_fun_name = "__loom_return_" + cur_f->getName().str();
+        Function *loom_f = M.getFunction(loom_fun_name);
+        
+        //Remove return from the generated function - we should add
+	      //our instructions in its place
+        BasicBlock &entry_block = loom_f->getEntryBlock();
+        Instruction &last_inst = entry_block.back();
+        last_inst.eraseFromParent();
+        
+        IRBuilder<> builder(&entry_block);
+        
+        //Function is external, so lets declare it
+        LLVMContext& context = M.getContext();
+        std::vector<llvm::Type *> newValue_args;
+        newValue_args.push_back(Type::getInt8PtrTy(context));
+        FunctionType *newValue_type =
+              FunctionType::get(Type::getVoidTy(context), newValue_args, false);
+        Constant *newValue_fun =
+              M.getOrInsertFunction("AssertManager_exitFunction", newValue_type);
+        
+        Attribute form_att = cur_f->getFnAttribute(ta_inst_anno_ref);
+        Value *hello_str = builder.CreateGlobalStringPtr(cur_f->getName().str() + ":" + form_att.getValueAsString().str());
+
+        std::vector<llvm::Value *> fun_args;
+        fun_args.push_back(hello_str);
+
+        //Figure out which (if any) argument we want to pass along
         
         builder.CreateCall(newValue_fun, fun_args);
         builder.CreateRetVoid();

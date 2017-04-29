@@ -7,7 +7,8 @@
 enum distribution {
   dist_monotonic = 0,
   dist_freq = 1,
-  dist_uniform = 2
+  dist_uniform = 2,
+  dist_timing_fract = 3
 };
 
 class Variable {

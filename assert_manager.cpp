@@ -8,6 +8,7 @@
 #include "frequency_variable.h"
 #include "monotonic_variable.h"
 #include "uniform_variable.h"
+#include "timing_fract_variable.h"
 #include "common_util.h"
 
 using namespace std;
@@ -36,6 +37,8 @@ string AssertManager::getVariableKey(string formatted_string) {
     res += Util::partSubstring(formatted_string, parts[3]);
   } else if (Util::partStringEqual(formatted_string, assert_type, "group") || Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
     res = Util::partSubstring(formatted_string, parts[3]);
+  } else if (Util::partStringEqual(formatted_string, assert_type, "timing_fract")) {
+    //just name is fine
   } else {
     printf("Unrecognised assertion type: %s\n", Util::partSubstring(formatted_string, assert_type).c_str());
   }
@@ -57,7 +60,7 @@ Variable* AssertManager::makeVariable(string formatted_string) {
   } else if (Util::partStringEqual(formatted_string, assert_type, "group") || Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
     //printf("makeVariable: new FrequencyVariable.\n");
     return new FrequencyVariable();
-  } if (Util::partStringEqual(formatted_string, assert_type, "arg_uniform")) {
+  } else if (Util::partStringEqual(formatted_string, assert_type, "arg_uniform")) {
     printf("makeVariable: new UniformVariable.\n");
     string min_str = Util::partSubstring(formatted_string, parts[4]);
     string max_str = Util::partSubstring(formatted_string, parts[5]);
@@ -66,6 +69,15 @@ Variable* AssertManager::makeVariable(string formatted_string) {
     int max_val  = atoi(max_str.c_str());
     int window_size = atoi(window_size_str.c_str());
     return new UniformVariable(min_val, max_val, window_size);
+  } else if (Util::partStringEqual(formatted_string, assert_type, "timing_fract")) {
+    printf("makeVariable: new TimingFractVariable.\n");
+    string target_time_str = Util::partSubstring(formatted_string, parts[3]);
+    string fract_str = Util::partSubstring(formatted_string, parts[4]);
+    string window_size_str = Util::partSubstring(formatted_string, parts[5]);
+    int target_time = atoi(target_time_str.c_str());
+    float fract = atof(fract_str.c_str());
+    int window_size = atoi(window_size_str.c_str());
+    return new TimingFractVariable(target_time, fract, window_size);
   } else {
     printf("Unrecognised assertion type: %s\n", Util::partSubstring(formatted_string, assert_type).c_str());
   }
@@ -87,4 +99,10 @@ void AssertManager::newValue(string formatted_string, int value) {
     //printf("Assertion failed!\n");
     OutputLogger::failedAssertion(var_key, AssertManager::instrumented_variables[var_key]);
   }
+}
+
+void AssertManager::exitFunction(string formatted_string) {
+  printf("Exit function called!\n");
+  string var_key = AssertManager::getVariableKey(formatted_string);
+  AssertManager::instrumented_variables[var_key]->newValue(formatted_string, 1);
 }

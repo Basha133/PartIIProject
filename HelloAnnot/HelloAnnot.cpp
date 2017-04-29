@@ -49,6 +49,11 @@ bool isFunctionFreq(const string& formatted_string) {
   return partStringEqual(formatted_string, parts[1], "call_freq");
 }
 
+bool isTimingFract(const string& formatted_string) {
+  vector<pair<int, int> > parts = getStringParts(formatted_string, ':');
+  return partStringEqual(formatted_string, parts[1], "timing_fract");
+}
+
 string getGroupName(const string& formatted_string) {
   vector<pair<int, int> > parts = getStringParts(formatted_string, ':');
   return partSubstring(formatted_string, parts[2]);
@@ -79,6 +84,7 @@ struct Hello : public ModulePass {
     }
     string ta_prefix = "TA_ASSERT";
     string ta_instrument_anno = "TA_INSTRUMENT";
+    string ta_instrument_exit_anno = "TA_INSTRUMENT_EXIT";
     bool functions_instrumented = false;
     
     map<string, string> group_to_param;
@@ -105,6 +111,9 @@ struct Hello : public ModulePass {
                 group_to_param[getGroupName(std_anno)] = getFunctFreqParams(std_anno);
               }
               fn->addFnAttr(ta_instrument_anno, anno);
+              if (isTimingFract(std_anno)) {
+                fn->addFnAttr(ta_instrument_exit_anno);
+              }
             }
           }
         }
@@ -142,7 +151,11 @@ struct Hello : public ModulePass {
       if (cur_fref->hasFnAttribute(ta_instrument_anno)) {
         errs() << "HelloAnnot: " << cur_fref->getName() << "\n";
         loom_inst_policy << "    - name: " << cur_fref->getName().str() << "\n";
-        loom_inst_policy << "      caller: [ entry ]" << "\n";
+        if (cur_fref->hasFnAttribute(ta_instrument_exit_anno)) {
+          loom_inst_policy << "      caller: [ entry, exit ]" << "\n";
+        } else {
+          loom_inst_policy << "      caller: [ entry ]" << "\n";
+        }
       }
     }
     

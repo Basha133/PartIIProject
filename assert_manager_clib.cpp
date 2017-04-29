@@ -13,6 +13,11 @@ void AssertManager_newValue(char* formatted_string, int value) {
   AssertManager::newValue(str, value);
 }
 
+void AssertManager_exitFunction(char* formatted_string) {
+  std::string str(formatted_string);
+  AssertManager::exitFunction(str);
+}
+
 #ifdef __cplusplus
 }
 #endif

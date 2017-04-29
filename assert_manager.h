@@ -14,6 +14,7 @@ class AssertManager {
 
   AssertManager();
   static void newValue(std::string formatted_string, int value);
+  static void exitFunction(std::string formatted_string);
   static std::string getVariableKey(std::string formatted_string);
   static Variable* makeVariable(std::string formatted_string);
 };
