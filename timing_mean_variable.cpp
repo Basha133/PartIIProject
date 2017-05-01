@@ -2,24 +2,23 @@
 #include <string>
 #include <sys/time.h>
 #include "common_util.h"
-#include "timing_fract_variable.h"
+#include "timing_mean_variable.h"
 
 using namespace std;
 
-TimingFractVariable::TimingFractVariable(int target_time, float fract, int window) : Variable(dist_monotonic) {
-  dist = dist_timing_fract;
+TimingMeanVariable::TimingMeanVariable(int target_time, int window) : Variable(dist_monotonic) {
+  dist = dist_timing_mean;
   this->target_time = target_time;
-  this->fract = fract;
   window_size = window;
-  running_count = 0;
+  running_mean = 0.0;
   ok = true;
 }
 
-bool TimingFractVariable::isOk() {
+bool TimingMeanVariable::isOk() {
   return ok;
 }
 
-string TimingFractVariable::getStatusMessage() {
+string TimingMeanVariable::getStatusMessage() {
   if (ok) {
     return "OK";
   }
@@ -27,12 +26,13 @@ string TimingFractVariable::getStatusMessage() {
   return res;
 }
 
-void TimingFractVariable::newValue(const string& formatted_string, long long x) {
+void TimingMeanVariable::newValue(const string& formatted_string, long long x) {
   timeval tv;
   gettimeofday(&tv, 0);
   //printf("Got a new value!\n");
-  //printf("My stats: target time: %d, fract: %f, window: %d\n",target_time, fract, window_size);
+  //printf("My stats: target time: %d, window: %d\n",target_time, window_size);
   if (x) {
+    //generic time gathering stuff
     //printf("It is exit from the function.\n");
     if (funct_started.empty()) {
       printf("Got exit from function before entry.\n");
@@ -44,19 +44,18 @@ void TimingFractVariable::newValue(const string& formatted_string, long long x) 
     Util::timeval_subtract(&diff, &tv, &started);
     measured_times.push_back((diff.tv_sec)*1000000+diff.tv_usec);
     printf("This time the function took: %d\n",measured_times.front());
-    if (measured_times.front() < target_time) {
-      running_count++;
-    }
+    
+    //variable logic
+    running_mean += (double)measured_times.front()/(double)window_size;
+
     if (measured_times.size() >= window_size) {
       if (measured_times.size() > window_size) {
         int pop_value = measured_times.front();
         measured_times.pop_front();
-        if (pop_value < target_time) {
-          running_count--;
-        }
+        running_mean -= (double)pop_value/(double)window_size;
       }
-      printf("current fract: %f\n", ((float)running_count/(float)window_size));
-      ok  = (((float)running_count/(float)window_size) > fract);
+      printf("current mean: %lf\n", running_mean);
+      ok  = running_mean < target_time;
     }
   } else {
     //printf("It is entry to the function\n");

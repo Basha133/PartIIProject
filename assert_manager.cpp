@@ -9,6 +9,7 @@
 #include "monotonic_variable.h"
 #include "uniform_variable.h"
 #include "timing_fract_variable.h"
+#include "timing_mean_variable.h"
 #include "common_util.h"
 
 using namespace std;
@@ -37,7 +38,7 @@ string AssertManager::getVariableKey(string formatted_string) {
     res += Util::partSubstring(formatted_string, parts[3]);
   } else if (Util::partStringEqual(formatted_string, assert_type, "group") || Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
     res = Util::partSubstring(formatted_string, parts[3]);
-  } else if (Util::partStringEqual(formatted_string, assert_type, "timing_fract")) {
+  } else if (Util::partStringEqual(formatted_string, assert_type, "timing_fract") || Util::partStringEqual(formatted_string, assert_type, "timing_mean")) {
     //just name is fine
   } else {
     printf("Unrecognised assertion type: %s\n", Util::partSubstring(formatted_string, assert_type).c_str());
@@ -78,6 +79,13 @@ Variable* AssertManager::makeVariable(string formatted_string) {
     float fract = atof(fract_str.c_str());
     int window_size = atoi(window_size_str.c_str());
     return new TimingFractVariable(target_time, fract, window_size);
+  } else if (Util::partStringEqual(formatted_string, assert_type, "timing_mean")) {
+    printf("makeVariable: new TimingMeanVariable.\n");
+    string target_time_str = Util::partSubstring(formatted_string, parts[3]);
+    string window_size_str = Util::partSubstring(formatted_string, parts[4]);
+    int target_time = atoi(target_time_str.c_str());
+    int window_size = atoi(window_size_str.c_str());
+    return new TimingMeanVariable(target_time, window_size);
   } else {
     printf("Unrecognised assertion type: %s\n", Util::partSubstring(formatted_string, assert_type).c_str());
   }
@@ -102,7 +110,7 @@ void AssertManager::newValue(string formatted_string, int value) {
 }
 
 void AssertManager::exitFunction(string formatted_string) {
-  printf("Exit function called!\n");
+  //printf("Exit function called!\n");
   string var_key = AssertManager::getVariableKey(formatted_string);
   AssertManager::instrumented_variables[var_key]->newValue(formatted_string, 1);
 }

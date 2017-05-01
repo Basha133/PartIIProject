@@ -49,9 +49,10 @@ bool isFunctionFreq(const string& formatted_string) {
   return partStringEqual(formatted_string, parts[1], "call_freq");
 }
 
-bool isTimingFract(const string& formatted_string) {
+bool isTiming(const string& formatted_string) {
   vector<pair<int, int> > parts = getStringParts(formatted_string, ':');
-  return partStringEqual(formatted_string, parts[1], "timing_fract");
+  return partStringEqual(formatted_string, parts[1], "timing_fract") ||
+         partStringEqual(formatted_string, parts[1], "timing_mean");
 }
 
 string getGroupName(const string& formatted_string) {
@@ -111,7 +112,7 @@ struct Hello : public ModulePass {
                 group_to_param[getGroupName(std_anno)] = getFunctFreqParams(std_anno);
               }
               fn->addFnAttr(ta_instrument_anno, anno);
-              if (isTimingFract(std_anno)) {
+              if (isTiming(std_anno)) {
                 fn->addFnAttr(ta_instrument_exit_anno);
               }
             }
