@@ -23,7 +23,7 @@ string MonotonicVariable::getStatusMessage() {
   return res;
 }
 
-void MonotonicVariable::newValue(const string& formatted_string, int x) {
+void MonotonicVariable::newValue(const string& formatted_string, long long x) {
   if (!initialised) {
     initialised = true;
     last_value = x;

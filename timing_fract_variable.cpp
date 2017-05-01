@@ -57,7 +57,7 @@ string TimingFractVariable::getStatusMessage() {
   return res;
 }
 
-void TimingFractVariable::newValue(const string& formatted_string, int x) {
+void TimingFractVariable::newValue(const string& formatted_string, long long x) {
   timeval tv;
   gettimeofday(&tv, 0);
   //printf("Got a new value!\n");

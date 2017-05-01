@@ -15,7 +15,7 @@ class Variable {
  protected:
   distribution dist;
  public:
-  virtual void newValue(const std::string& formatted_string, int);
+  virtual void newValue(const std::string& formatted_string, long long value);
   virtual bool isOk();
   virtual std::string getStatusMessage();
   Variable(distribution dist);

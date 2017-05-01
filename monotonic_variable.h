@@ -12,7 +12,7 @@ class MonotonicVariable : public Variable {
   bool initialised;
   bool ok;
  public:
-  void newValue(const std::string& formatted_string, int);
+  void newValue(const std::string& formatted_string, long long value);
   bool isOk();
   std::string getStatusMessage();
   MonotonicVariable(bool inc);

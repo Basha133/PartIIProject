@@ -42,7 +42,7 @@ string FrequencyVariable::getStatusMessage() {
   return res;
 }
 
-void FrequencyVariable::newValue(const string& formatted_string, int x) {
+void FrequencyVariable::newValue(const string& formatted_string, long long x) {
   vector<pair<int,int> > parts = Util::getStringParts(formatted_string, ':');
   //value_name, ta_assert, assert_type, group_str, (opt from here) freq_str, more_than_str, window_size_str
   string value_name = Util::partSubstring(formatted_string, parts[0]); 

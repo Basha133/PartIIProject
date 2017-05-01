@@ -54,7 +54,7 @@ string UniformVariable::getStatusMessage() {
   return res;
 }
 
-void UniformVariable::newValue(const string& formatted_string, int x) {
+void UniformVariable::newValue(const string& formatted_string, long long x) {
   //printf("Hey, I got a value: %d\n", x);
   //printf("My stats: min: %d max: %d bin_count: %d window_size: %d\n", min_val, max_val, bin_count, window_size);
 

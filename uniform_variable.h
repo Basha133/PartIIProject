@@ -17,7 +17,7 @@ class UniformVariable : public Variable {
   std::deque<int> bin_num;
   std::vector<int> bins;
  public:
-  void newValue(const std::string& formatted_string, int);
+  void newValue(const std::string& formatted_string, long long value);
   bool isOk();
   std::string getStatusMessage();
   UniformVariable(int min_value, int max_value, int window);

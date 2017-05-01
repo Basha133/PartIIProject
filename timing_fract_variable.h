@@ -18,7 +18,7 @@ class TimingFractVariable : public Variable {
   std::deque<timeval> funct_started;
   std::deque<int> measured_times;
  public:
-  void newValue(const std::string& formatted_string, int);
+  void newValue(const std::string& formatted_string, long long value);
   bool isOk();
   std::string getStatusMessage();
   TimingFractVariable(int target_time, float fract, int window);

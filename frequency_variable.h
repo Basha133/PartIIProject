@@ -22,7 +22,7 @@ class FrequencyVariable : public Variable {
 
   int getIdFromName(const std::string& call_name);
  public:
-  void newValue(const std::string& formatted_string, int);
+  void newValue(const std::string& formatted_string, long long value);
   bool isOk();
   std::string getStatusMessage();
   FrequencyVariable();
