@@ -1,6 +1,8 @@
 #include <fstream>
 #include <map>
 #include <string>
+#include <utility>
+#include <vector>
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DebugInfoMetadata.h"
 #include "llvm/IR/Constants.h"
@@ -61,16 +63,46 @@ struct TARuntimeCalls : public ModulePass {
     string ta_instrument_exit_anno = "TA_INSTRUMENT_EXIT";
     StringRef ta_inst_anno_ref = StringRef(ta_instrument_anno);
     
+    vector<pair<string, pair<string, bool> > > instr_stuff;
+    ifstream stuff_to_instrument;
+    string fun_name, fun_assert;
+
+    stuff_to_instrument.open("stuff_to_instrument.ta");
+    char c;
+    while (!stuff_to_instrument.eof()) {
+      fun_name.clear();
+      fun_assert.clear();
+      stuff_to_instrument.get(c);
+      if (stuff_to_instrument.eof()) {
+        break;
+      }
+      while (c != ' ') {
+        fun_name.push_back(c);
+        stuff_to_instrument.get(c);
+      }
+      stuff_to_instrument.get(c);
+      while (!((c == '?')||(c == '!'))) {
+        fun_assert.push_back(c);
+        stuff_to_instrument.get(c);
+      }
+      instr_stuff.push_back(make_pair(fun_name, make_pair(fun_assert, (c=='!'))));
+      stuff_to_instrument.get(c);
+    }
+
+    errs() << "RuntimeCalls: Parsed info from file:\n";
+    for (int i=0; i<instr_stuff.size(); i++) {
+      errs() << instr_stuff[i].first << instr_stuff[i].second.first
+          << (instr_stuff[i].second.second?"T":"F") << "\n";
+    }
+
     //Manage function annotations - generate calls to assertion manager
-    for (auto cur_f = M.getFunctionList().begin(),
-         end_f = M.getFunctionList().end();
-	       cur_f != end_f; ++cur_f) {
-      //errs() << "RuntimeCalls: funct " << cur_fref->getName() << "\n";
-      if (cur_f->hasFnAttribute(ta_instrument_anno)) {
-        errs() << "RuntimeCalls: " << cur_f->getName() << "\n";
-        string loom_fun_name = "__loom_call_" + cur_f->getName().str();
-        Function *loom_f = M.getFunction(loom_fun_name);
-        
+    for (int k=0; k<instr_stuff.size(); k++) {
+      string loom_fun_name = "__loom_call_" + instr_stuff[k].first;
+      Function *loom_f = M.getFunction(loom_fun_name);
+
+      if (loom_f) {
+        errs() << "RuntimeCalls: " << instr_stuff[k].first << "\n";
+                
         //Remove return from the generated function - we should add
 	      //our instructions in its place
         BasicBlock &entry_block = loom_f->getEntryBlock();
@@ -88,18 +120,14 @@ struct TARuntimeCalls : public ModulePass {
               FunctionType::get(Type::getVoidTy(context), newValue_args, false);
         Constant *newValue_fun =
               M.getOrInsertFunction("AssertManager_newValue", newValue_type);
-
-        //Value *hello_str = builder.CreateGlobalStringPtr("Instrumentation in action! \n");
-        //Value *hello_str = builder.CreateGlobalStringPtr(cur_f->getName().str());
         
-        Attribute form_att = cur_f->getFnAttribute(ta_inst_anno_ref);
-        Value *hello_str = builder.CreateGlobalStringPtr(cur_f->getName().str() + ":" + form_att.getValueAsString().str());
+        Value *hello_str = builder.CreateGlobalStringPtr(instr_stuff[k].first + ":" + instr_stuff[k].second.first);
 
         std::vector<llvm::Value *> fun_args;
         fun_args.push_back(hello_str);
 
         //Figure out which (if any) argument we want to pass along
-        int arg_num = getArgNumFromFormat(form_att.getValueAsString().str());
+        int arg_num = getArgNumFromFormat(instr_stuff[k].second.first);
         
         Value* x = ConstantInt::getSigned(Type::getInt32Ty(context), 0);
         if (arg_num >= 0) {
@@ -111,17 +139,15 @@ struct TARuntimeCalls : public ModulePass {
         }
 
         fun_args.push_back(x);
-        //Constant *printfFunc = M.getFunction("printf");
-        //builder.CreateCall(printfFunc, fun_args);
-        //Constant *assert_manager_call = M.getFunction("AssertManager_newValue");
         
         builder.CreateCall(newValue_fun, fun_args);
         builder.CreateRetVoid();
       }
-      if (cur_f->hasFnAttribute(ta_instrument_exit_anno)) {
-        errs() << "RuntimeCalls: " << cur_f->getName() << " exit\n";
-        string loom_fun_name = "__loom_return_" + cur_f->getName().str();
-        Function *loom_f = M.getFunction(loom_fun_name);
+      
+      loom_fun_name = "__loom_return_" + instr_stuff[k].first;
+      loom_f = M.getFunction(loom_fun_name);
+      if (loom_f) {
+        errs() << "RuntimeCalls: " << instr_stuff[k].first << " exit\n";
         
         //Remove return from the generated function - we should add
 	      //our instructions in its place
@@ -140,8 +166,7 @@ struct TARuntimeCalls : public ModulePass {
         Constant *newValue_fun =
               M.getOrInsertFunction("AssertManager_exitFunction", newValue_type);
         
-        Attribute form_att = cur_f->getFnAttribute(ta_inst_anno_ref);
-        Value *hello_str = builder.CreateGlobalStringPtr(cur_f->getName().str() + ":" + form_att.getValueAsString().str());
+        Value *hello_str = builder.CreateGlobalStringPtr(instr_stuff[k].first + ":" + instr_stuff[k].second.first);
 
         std::vector<llvm::Value *> fun_args;
         fun_args.push_back(hello_str);

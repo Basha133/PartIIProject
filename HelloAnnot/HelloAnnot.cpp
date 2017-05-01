@@ -75,8 +75,11 @@ struct Hello : public ModulePass {
   bool runOnModule(Module &M) override {
     ifstream loom_inst_basic_policy;
     ofstream loom_inst_policy;
+    ofstream stuff_to_instrument;
     loom_inst_basic_policy.open ("basic.policy");
     loom_inst_policy.open ("loom_inst.policy");
+    stuff_to_instrument.open ("stuff_to_instrument.ta", ios_base::app | ios_base::out);
+
     char c;
     //Copy base of our loom policy into a new loom policy
     while (!loom_inst_basic_policy.eof()) {
@@ -152,10 +155,13 @@ struct Hello : public ModulePass {
       if (cur_fref->hasFnAttribute(ta_instrument_anno)) {
         errs() << "HelloAnnot: " << cur_fref->getName() << "\n";
         loom_inst_policy << "    - name: " << cur_fref->getName().str() << "\n";
+        stuff_to_instrument << cur_fref->getName().str() << " " << cur_fref->getFnAttribute(ta_instrument_anno).getValueAsString().str();
         if (cur_fref->hasFnAttribute(ta_instrument_exit_anno)) {
           loom_inst_policy << "      caller: [ entry, exit ]" << "\n";
+          stuff_to_instrument << "!\n";
         } else {
           loom_inst_policy << "      caller: [ entry ]" << "\n";
+          stuff_to_instrument << "?\n";
         }
       }
     }
@@ -216,6 +222,7 @@ struct Hello : public ModulePass {
     //errs().write_escaped(F.getName()) << '\n';
     loom_inst_basic_policy.close();
     loom_inst_policy.close();
+    stuff_to_instrument.close();
     return false;
   }
 }; // end of struct Hello
