@@ -43,10 +43,10 @@ void TimingMeanVariable::newValue(const string& formatted_string, long long x) {
     timeval diff;
     Util::timeval_subtract(&diff, &tv, &started);
     measured_times.push_back((diff.tv_sec)*1000000+diff.tv_usec);
-    printf("This time the function took: %d\n",measured_times.front());
+    printf("This time the function took: %d\n",measured_times.back());
     
     //variable logic
-    running_mean += (double)measured_times.front()/(double)window_size;
+    running_mean += (double)measured_times.back()/(double)window_size;
 
     if (measured_times.size() >= window_size) {
       if (measured_times.size() > window_size) {

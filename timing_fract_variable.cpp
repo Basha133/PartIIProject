@@ -43,8 +43,8 @@ void TimingFractVariable::newValue(const string& formatted_string, long long x) 
     timeval diff;
     Util::timeval_subtract(&diff, &tv, &started);
     measured_times.push_back((diff.tv_sec)*1000000+diff.tv_usec);
-    printf("This time the function took: %d\n",measured_times.front());
-    if (measured_times.front() < target_time) {
+    printf("This time the function took: %d\n",measured_times.back());
+    if (measured_times.back() < target_time) {
       running_count++;
     }
     if (measured_times.size() >= window_size) {
