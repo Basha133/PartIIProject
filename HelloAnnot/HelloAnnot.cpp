@@ -77,15 +77,17 @@ struct Hello : public ModulePass {
     ofstream loom_inst_policy;
     ofstream stuff_to_instrument;
     loom_inst_basic_policy.open ("basic.policy");
-    loom_inst_policy.open ("loom_inst.policy");
+    loom_inst_policy.open ("loom_inst.policy", ios_base::app | ios_base::out);
     stuff_to_instrument.open ("stuff_to_instrument.ta", ios_base::app | ios_base::out);
 
     char c;
     //Copy base of our loom policy into a new loom policy
-    while (!loom_inst_basic_policy.eof()) {
+    //No longer used, since multiple passes add info to the same policy
+    /*while (!loom_inst_basic_policy.eof()) {
       loom_inst_basic_policy.get(c);
       loom_inst_policy << c;
-    }
+    }*/
+
     string ta_prefix = "TA_ASSERT";
     string ta_instrument_anno = "TA_INSTRUMENT";
     string ta_instrument_exit_anno = "TA_INSTRUMENT_EXIT";
@@ -143,9 +145,11 @@ struct Hello : public ModulePass {
       }
 
     }
-    if (functions_instrumented) {
+    
+    //No longer used
+    /*if (functions_instrumented) {
         loom_inst_policy << "functions:\n";
-    }
+    }*/
     
     //Manage function annotations - generate policies
     for (auto cur_fref = M.getFunctionList().begin(),

@@ -2,3 +2,5 @@ strategy: callout
 hook_prefix: __loom
 logging: none
 
+functions:
+
