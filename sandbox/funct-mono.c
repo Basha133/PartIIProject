@@ -2,19 +2,17 @@
 #include "../ta_macros.h"
 #include "../assert_manager_clib.h"
 
-void foo(int x) TA_CALL_FREQUENCY("group_a", 0.6, 1, 4) {
+void foo(int x) TA_ARG_MONOTONIC(0, 1) {
   printf("foo does something%d\n",x);
 }
 
-void bar() TA_CALL_GROUP("group_a") {
+void bar() {
   printf("bar does something\n");
 }
 
 int main() {
-  bar();
   foo(42);
   foo(47);
-  foo(5);
-  bar();
+  foo(105);
   return 0;
 }

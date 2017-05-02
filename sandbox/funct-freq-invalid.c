@@ -2,7 +2,7 @@
 #include "../ta_macros.h"
 #include "../assert_manager_clib.h"
 
-void foo(int x) TA_CALL_FREQUENCY("group_a", 0.6, 1, 4) {
+void foo(int x) TA_CALL_FREQUENCY("group_a", 0.8, 1, 4) {
   printf("foo does something%d\n",x);
 }
 
