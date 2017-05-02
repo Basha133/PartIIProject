@@ -14,9 +14,5 @@ opt -O2 < ${1}-preopt.bc > ${1}-final.bc
 
 llc -filetype=obj ${1}-final.bc
 
-cp ${1}-final.o ~/project/${1}-final.o
-
-cd ~/project
-
-clang -L. -Wl,-rpath=. -lassert_manager_clib -lpmc -o ${1} ${1}-final.o
+clang -L/home/test/project -Wl,-rpath=/home/test/project -lassert_manager_clib -lpmc -o ${1} ${1}-final.o
 

@@ -4,28 +4,32 @@
 #inner loop min, step size, inner loop max 
 
 if [ "${4}" == "${6}" ]; then
+  echo "No assert:"
   for i in $(seq ${1} ${2} ${3})
   do
-    ./generic-call-freq-no-assert ${7} ${i} ${4}
+    test_files/generic-call-freq-no-assert ${7} ${i} ${4}
   done
 
   echo ""
+  echo "With assert:"
 
   for i in $(seq ${1} ${2} ${3})
   do
-    ./generic-call-freq-assert ${7} ${i} ${4}
+    test_files/generic-call-freq-assert ${7} ${i} ${4}
   done
 else
+  echo "No assert:"
   for i in $(seq ${4} ${5} ${6})
   do
-    ./generic-call-freq-no-assert ${7} ${1} ${i}
+    test_files/generic-call-freq-no-assert ${7} ${1} ${i}
   done
 
   echo ""
+  echo "With assert:"
 
   for i in $(seq ${4} ${5} ${6})
   do
-    ./generic-call-freq-assert ${7} ${1} ${i}
+    test_files/generic-call-freq-assert ${7} ${1} ${i}
   done
 fi
 

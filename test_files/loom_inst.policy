@@ -8,3 +8,9 @@ functions:
       caller: [ entry ]
     - name: bar
       caller: [ entry ]
+    - name: foo
+      caller: [ entry ]
+    - name: foo
+      caller: [ entry ]
+    - name: bar
+      caller: [ entry ]
