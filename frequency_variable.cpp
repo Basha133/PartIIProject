@@ -6,13 +6,16 @@
 
 using namespace std;
 
-FrequencyVariable::FrequencyVariable() : Variable(dist_freq) {
+FrequencyVariable::FrequencyVariable(string desired_call, float frequency, bool more_than, int window_size) : Variable(dist_freq) {
   dist = dist_freq;
-  initialised = false;
-  desired_call = "";
+  this->desired_call = desired_call;
+  freq = frequency;
+  this->more_than = more_than;
+  this->window_size = window_size;
   next_id = 1;
   running_count = 0;
   ok = 1;
+  //printf("freq_var initialised: freq:%f more_than:%d window_size:%d desired_call:%s\n", freq, more_than, window_size, desired_call.c_str());
 }
 
 int FrequencyVariable::getIdFromName(const string& call_name) {
@@ -46,23 +49,6 @@ void FrequencyVariable::newValue(const string& formatted_string, long long x) {
   vector<pair<int,int> > parts = Util::getStringParts(formatted_string, ':');
   //value_name, ta_assert, assert_type, group_str, (opt from here) freq_str, more_than_str, window_size_str
   string value_name = Util::partSubstring(formatted_string, parts[0]); 
-  pair<int, int> assert_type = parts[2];
-
-  if (Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
-    desired_call = value_name;
-  }
-
-  if (!initialised) {
-    //printf("Initialising frequency variable - full formatted string: %s\n", formatted_string.c_str());
-    string freq_str = Util::partSubstring(formatted_string, parts[4]);
-    string window_size_str = Util::partSubstring(formatted_string, parts[6]);
-    //std::string::size_type sz; - could be used for stof add stoi
-    freq = (float) atof(freq_str.c_str());
-    more_than = Util::partStringEqual(formatted_string, parts[5], "1");
-    window_size = atoi(window_size_str.c_str());
-    initialised = true;
-    //printf("freq_var initialised: freq:%f more_than:%d window_size:%d\n", freq, more_than, window_size);
-  }
   
   int curr_id = getIdFromName(value_name);
   values.push_back(curr_id);
@@ -70,7 +56,6 @@ void FrequencyVariable::newValue(const string& formatted_string, long long x) {
     running_count++;
   }
   
-  //Should be initialised anyway
   if (values.size() >= window_size) {
     if (values.size() > window_size) {
       int pop_value = values.front();

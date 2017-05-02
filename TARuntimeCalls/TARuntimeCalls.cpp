@@ -91,7 +91,7 @@ struct TARuntimeCalls : public ModulePass {
 
     errs() << "RuntimeCalls: Parsed info from file:\n";
     for (int i=0; i<instr_stuff.size(); i++) {
-      errs() << instr_stuff[i].first << instr_stuff[i].second.first
+      errs() << instr_stuff[i].first << " " << instr_stuff[i].second.first
           << (instr_stuff[i].second.second?"T":"F") << "\n";
     }
 

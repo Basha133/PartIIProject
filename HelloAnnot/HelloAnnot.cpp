@@ -114,7 +114,7 @@ struct Hello : public ModulePass {
             } else {
               if (isFunctionFreq(std_anno)) {
                 errs() << "HelloAnnot: found call_freq: " << getFunctFreqParams(std_anno) << "\n";
-                group_to_param[getGroupName(std_anno)] = getFunctFreqParams(std_anno);
+                group_to_param[getGroupName(std_anno)] = getFunctFreqParams(std_anno) + ":" + fn->getName().str();
               }
               fn->addFnAttr(ta_instrument_anno, anno);
               if (isTiming(std_anno)) {

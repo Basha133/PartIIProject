@@ -60,7 +60,19 @@ Variable* AssertManager::makeVariable(string formatted_string) {
     return new MonotonicVariable(inc);
   } else if (Util::partStringEqual(formatted_string, assert_type, "group") || Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
     //printf("makeVariable: new FrequencyVariable.\n");
-    return new FrequencyVariable();
+    string desired_call;
+    if (Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
+      desired_call = Util::partSubstring(formatted_string, parts[0]);
+    } else {
+      desired_call = Util::partSubstring(formatted_string, parts[7]);
+    }
+    //printf("Initialising frequency variable - full formatted string: %s\n", formatted_string.c_str());
+    string freq_str = Util::partSubstring(formatted_string, parts[4]);
+    string window_size_str = Util::partSubstring(formatted_string, parts[6]);
+    float freq = (float) atof(freq_str.c_str());
+    bool more_than = Util::partStringEqual(formatted_string, parts[5], "1");
+    int window_size = atoi(window_size_str.c_str());
+    return new FrequencyVariable(desired_call, freq, more_than, window_size);
   } else if (Util::partStringEqual(formatted_string, assert_type, "arg_uniform")) {
     printf("makeVariable: new UniformVariable.\n");
     string min_str = Util::partSubstring(formatted_string, parts[4]);

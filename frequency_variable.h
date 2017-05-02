@@ -25,7 +25,7 @@ class FrequencyVariable : public Variable {
   void newValue(const std::string& formatted_string, long long value);
   bool isOk();
   std::string getStatusMessage();
-  FrequencyVariable();
+  FrequencyVariable(std::string desired_call, float frequency, bool more_than, int window_size);
 };
 
 #endif
