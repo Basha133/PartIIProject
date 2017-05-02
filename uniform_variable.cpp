@@ -34,7 +34,7 @@ UniformVariable::UniformVariable(int min_value, int max_value, int window) : Var
   }
   bins.resize(bin_count, 0);
   expected_count = (double)window_size/(double)bin_count;
-  printf("expected_count: %lf\n", expected_count);
+  //printf("expected_count: %lf\n", expected_count);
   double running_chi = 0;
   ok = 1;
 }

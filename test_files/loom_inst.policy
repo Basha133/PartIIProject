@@ -4,7 +4,3 @@ logging: none
 
 functions:
 
-    - name: foo
-      caller: [ entry ]
-    - name: bar
-      caller: [ entry ]
