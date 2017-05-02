@@ -6,7 +6,7 @@
 #include "../ta_macros.h"
 #include "../assert_manager_clib.h"
 
-void foo(int x) TA_CALL_FREQUENCY("group_a", 0.6, 1, 3900) {
+void foo(int x) TA_CALL_FREQUENCY("group_a", 0.6, 1, 1000) {
   volatile int res;
   for (int i=0; i<x; i++) {
     res+=i;

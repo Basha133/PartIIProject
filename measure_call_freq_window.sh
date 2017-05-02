@@ -9,6 +9,6 @@ do
 
   ./build_test_assert.sh generic-call-freq-window-instance
 
-  ./generic-call-freq-window-instance ${6} ${4} ${5}
+  test_files/generic-call-freq-window-instance ${6} ${4} ${5}
 done
 
