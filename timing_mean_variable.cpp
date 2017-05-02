@@ -22,7 +22,9 @@ string TimingMeanVariable::getStatusMessage() {
   if (ok) {
     return "OK";
   }
-  string res = string("This function should take les than...");
+  string res = string("On average (mean) this function should take les than ")
+    + to_string(target_time) + "us, but it did take " + to_string(running_mean)
+    + "us on average over the last " + to_string(window_size) + " runs.";
   return res;
 }
 
@@ -43,7 +45,7 @@ void TimingMeanVariable::newValue(const string& formatted_string, long long x) {
     timeval diff;
     Util::timeval_subtract(&diff, &tv, &started);
     measured_times.push_back((diff.tv_sec)*1000000+diff.tv_usec);
-    printf("This time the function took: %d\n",measured_times.back());
+    //printf("This time the function took: %d\n",measured_times.back());
     
     //variable logic
     running_mean += (double)measured_times.back()/(double)window_size;
@@ -54,7 +56,7 @@ void TimingMeanVariable::newValue(const string& formatted_string, long long x) {
         measured_times.pop_front();
         running_mean -= (double)pop_value/(double)window_size;
       }
-      printf("current mean: %lf\n", running_mean);
+      //printf("current mean: %lf\n", running_mean);
       ok  = running_mean < target_time;
     }
   } else {

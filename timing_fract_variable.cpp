@@ -23,7 +23,9 @@ string TimingFractVariable::getStatusMessage() {
   if (ok) {
     return "OK";
   }
-  string res = string("This function should take les than...");
+  string res = to_string(fract) + " of time this function should take les than "
+      + to_string(target_time) + "us, but it only did so in "
+      + to_string((float)running_count/(float)window_size);
   return res;
 }
 
@@ -43,7 +45,7 @@ void TimingFractVariable::newValue(const string& formatted_string, long long x) 
     timeval diff;
     Util::timeval_subtract(&diff, &tv, &started);
     measured_times.push_back((diff.tv_sec)*1000000+diff.tv_usec);
-    printf("This time the function took: %d\n",measured_times.back());
+    //printf("This time the function took: %d\n",measured_times.back());
     if (measured_times.back() < target_time) {
       running_count++;
     }
@@ -55,7 +57,7 @@ void TimingFractVariable::newValue(const string& formatted_string, long long x) 
           running_count--;
         }
       }
-      printf("current fract: %f\n", ((float)running_count/(float)window_size));
+      //printf("current fract: %f\n", ((float)running_count/(float)window_size));
       ok  = (((float)running_count/(float)window_size) > fract);
     }
   } else {
