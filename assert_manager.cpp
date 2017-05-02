@@ -74,7 +74,7 @@ Variable* AssertManager::makeVariable(string formatted_string) {
     int window_size = atoi(window_size_str.c_str());
     return new FrequencyVariable(desired_call, freq, more_than, window_size);
   } else if (Util::partStringEqual(formatted_string, assert_type, "arg_uniform")) {
-    printf("makeVariable: new UniformVariable.\n");
+    //printf("makeVariable: new UniformVariable.\n");
     string min_str = Util::partSubstring(formatted_string, parts[4]);
     string max_str = Util::partSubstring(formatted_string, parts[5]);
     string window_size_str = Util::partSubstring(formatted_string, parts[6]);
@@ -83,7 +83,7 @@ Variable* AssertManager::makeVariable(string formatted_string) {
     int window_size = atoi(window_size_str.c_str());
     return new UniformVariable(min_val, max_val, window_size);
   } else if (Util::partStringEqual(formatted_string, assert_type, "timing_fract")) {
-    printf("makeVariable: new TimingFractVariable.\n");
+    //printf("makeVariable: new TimingFractVariable.\n");
     string target_time_str = Util::partSubstring(formatted_string, parts[3]);
     string fract_str = Util::partSubstring(formatted_string, parts[4]);
     string window_size_str = Util::partSubstring(formatted_string, parts[5]);
@@ -92,7 +92,7 @@ Variable* AssertManager::makeVariable(string formatted_string) {
     int window_size = atoi(window_size_str.c_str());
     return new TimingFractVariable(target_time, fract, window_size);
   } else if (Util::partStringEqual(formatted_string, assert_type, "timing_mean")) {
-    printf("makeVariable: new TimingMeanVariable.\n");
+    //printf("makeVariable: new TimingMeanVariable.\n");
     string target_time_str = Util::partSubstring(formatted_string, parts[3]);
     string window_size_str = Util::partSubstring(formatted_string, parts[4]);
     int target_time = atoi(target_time_str.c_str());
