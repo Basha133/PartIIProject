@@ -2,10 +2,6 @@
 
 cd ~/project/test_files
 
-rm stuff_to_instrument.ta
-
-cp basic.policy loom_inst.policy
-
 clang -g -O0 -emit-llvm ${1}.c -c -o ${1}.bc
 
 opt -load ~/llvm/Release/lib/ProjectHelloAnnot.so -hello_annot < ${1}.bc > ${1}-annot.bc

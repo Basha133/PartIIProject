@@ -75,18 +75,18 @@ struct Hello : public ModulePass {
   bool runOnModule(Module &M) override {
     ifstream loom_inst_basic_policy;
     ofstream loom_inst_policy;
-    ofstream stuff_to_instrument;
+    //ofstream stuff_to_instrument;
     loom_inst_basic_policy.open ("basic.policy");
-    loom_inst_policy.open ("loom_inst.policy", ios_base::app | ios_base::out);
-    stuff_to_instrument.open ("stuff_to_instrument.ta", ios_base::app | ios_base::out);
+    loom_inst_policy.open ("loom_inst.policy");
+    //stuff_to_instrument.open ("stuff_to_instrument.ta", ios_base::app | ios_base::out);
 
     char c;
     //Copy base of our loom policy into a new loom policy
     //No longer used, since multiple passes add info to the same policy
-    /*while (!loom_inst_basic_policy.eof()) {
+    while (!loom_inst_basic_policy.eof()) {
       loom_inst_basic_policy.get(c);
       loom_inst_policy << c;
-    }*/
+    }
 
     string ta_prefix = "TA_ASSERT";
     string ta_instrument_anno = "TA_INSTRUMENT";
@@ -146,10 +146,9 @@ struct Hello : public ModulePass {
 
     }
     
-    //No longer used
-    /*if (functions_instrumented) {
+    if (functions_instrumented) {
         loom_inst_policy << "functions:\n";
-    }*/
+    }
     
     //Manage function annotations - generate policies
     for (auto cur_fref = M.getFunctionList().begin(),
@@ -159,13 +158,13 @@ struct Hello : public ModulePass {
       if (cur_fref->hasFnAttribute(ta_instrument_anno)) {
         errs() << "HelloAnnot: " << cur_fref->getName() << "\n";
         loom_inst_policy << "    - name: " << cur_fref->getName().str() << "\n";
-        stuff_to_instrument << cur_fref->getName().str() << " " << cur_fref->getFnAttribute(ta_instrument_anno).getValueAsString().str();
+        //stuff_to_instrument << cur_fref->getName().str() << " " << cur_fref->getFnAttribute(ta_instrument_anno).getValueAsString().str();
         if (cur_fref->hasFnAttribute(ta_instrument_exit_anno)) {
-          loom_inst_policy << "      caller: [ entry, exit ]" << "\n";
-          stuff_to_instrument << "!\n";
+          loom_inst_policy << "      callee: [ entry, exit ]" << "\n";
+          //stuff_to_instrument << "!\n";
         } else {
-          loom_inst_policy << "      caller: [ entry ]" << "\n";
-          stuff_to_instrument << "?\n";
+          loom_inst_policy << "      callee: [ entry ]" << "\n";
+          //stuff_to_instrument << "?\n";
         }
       }
     }
@@ -226,7 +225,7 @@ struct Hello : public ModulePass {
     //errs().write_escaped(F.getName()) << '\n';
     loom_inst_basic_policy.close();
     loom_inst_policy.close();
-    stuff_to_instrument.close();
+    //stuff_to_instrument.close();
     return false;
   }
 }; // end of struct Hello
