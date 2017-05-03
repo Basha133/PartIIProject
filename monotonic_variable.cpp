@@ -5,7 +5,6 @@
 using namespace std;
 
 MonotonicVariable::MonotonicVariable(bool inc) : Variable(dist_monotonic) {
-  dist = dist_monotonic;
   this->inc = inc;
   this->initialised = false;
   this->ok = true;

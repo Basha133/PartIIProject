@@ -7,7 +7,6 @@
 using namespace std;
 
 FrequencyVariable::FrequencyVariable(string desired_call, float frequency, bool more_than, int window_size) : Variable(dist_freq) {
-  dist = dist_freq;
   this->desired_call = desired_call;
   freq = frequency;
   this->more_than = more_than;

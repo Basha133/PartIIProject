@@ -6,8 +6,7 @@
 
 using namespace std;
 
-TimingFractVariable::TimingFractVariable(int target_time, float fract, int window) : Variable(dist_monotonic) {
-  dist = dist_timing_fract;
+TimingFractVariable::TimingFractVariable(int target_time, float fract, int window) : Variable(dist_timing_fract) {
   this->target_time = target_time;
   this->fract = fract;
   window_size = window;

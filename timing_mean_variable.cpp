@@ -6,8 +6,7 @@
 
 using namespace std;
 
-TimingMeanVariable::TimingMeanVariable(int target_time, int window) : Variable(dist_monotonic) {
-  dist = dist_timing_mean;
+TimingMeanVariable::TimingMeanVariable(int target_time, int window) : Variable(dist_timing_mean) {
   this->target_time = target_time;
   window_size = window;
   running_mean = 0.0;

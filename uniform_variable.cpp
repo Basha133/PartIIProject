@@ -20,8 +20,7 @@ const double chi_critical999[100] = {
   138.438, 139.666, 140.893, 142.119, 143.344, 144.567, 145.789, 147.01, 148.23, 149.449
 };
 
-UniformVariable::UniformVariable(int min_value, int max_value, int window) : Variable(dist_freq) {
-  dist = dist_uniform;
+UniformVariable::UniformVariable(int min_value, int max_value, int window) : Variable(dist_uniform) {
   min_val = min_value;
   max_val = max_value;
   window_size = window;
