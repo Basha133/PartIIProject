@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
+#include <mutex>
 #include <string>
 #include "uniform_variable.h"
 #include "common_util.h"
@@ -46,15 +47,16 @@ string UniformVariable::getStatusMessage() {
   if (ok) {
     return "OK";
   }
+  data_mutex.lock();
   string res = string("Should be a uniform distribution. ") + 
     "With 99.9% probability, the chi-squared value for the measured data should be less than " +
     to_string(chi_critical999[bin_count-2])  + " but it is " +
     to_string(running_chi);
+  data_mutex.unlock();
   return res;
 }
 
 void UniformVariable::newValue(const string& formatted_string, long long x) {
-  //printf("Hey, I got a value: %d\n", x);
   //printf("My stats: min: %d max: %d bin_count: %d window_size: %d\n", min_val, max_val, bin_count, window_size);
 
   //check this after some sleep
@@ -62,6 +64,8 @@ void UniformVariable::newValue(const string& formatted_string, long long x) {
   if (curr_bin == bin_count) {
     curr_bin--;
   }
+
+  data_mutex.lock();
   bin_num.push_back(curr_bin);
   
   //printf("bin %d: %d expected: %lf\n",curr_bin, bins[curr_bin], expected_count);
@@ -91,4 +95,5 @@ void UniformVariable::newValue(const string& formatted_string, long long x) {
   } else {
     bins[curr_bin]++;
   }
+  data_mutex.unlock();
 }

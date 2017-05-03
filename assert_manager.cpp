@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <mutex>
 #include <string>
 #include <utility>
 #include "assert_manager.h"
@@ -15,6 +16,7 @@
 using namespace std;
 
 map<string, Variable*> AssertManager::instrumented_variables;
+mutex AssertManager::map_mutex;
 
 AssertManager::AssertManager() {
   
@@ -108,21 +110,36 @@ void AssertManager::newValue(string formatted_string, int value) {
   string var_key = AssertManager::getVariableKey(formatted_string);
   //printf("I got a new value! %s: %d\n",var_key.c_str(), value);
   OutputLogger::newValue(var_key, value);
-
-  if (AssertManager::instrumented_variables.find(var_key) == AssertManager::instrumented_variables.end()) {
+  
+  map_mutex.lock();
+  auto var_it = AssertManager::instrumented_variables.find(var_key);
+  if (var_it == AssertManager::instrumented_variables.end()) {
     //printf("Variable seen for the first time, calling makeVariable.\n");
-    AssertManager::instrumented_variables.insert(make_pair(var_key, AssertManager::makeVariable(formatted_string) )); 
+    AssertManager::instrumented_variables.insert(make_pair(var_key, AssertManager::makeVariable(formatted_string) ));
+    var_it = AssertManager::instrumented_variables.find(var_key);
   }
+  Variable* var_ptr = var_it->second;
+  map_mutex.unlock();
 
-  AssertManager::instrumented_variables[var_key]->newValue(formatted_string, value);
-  if (!AssertManager::instrumented_variables[var_key]->isOk()) {
+  var_ptr->newValue(formatted_string, value);
+  if (!var_ptr->isOk()) {
     //printf("Assertion failed!\n");
-    OutputLogger::failedAssertion(var_key, AssertManager::instrumented_variables[var_key]);
+    OutputLogger::failedAssertion(var_key, var_ptr);
   }
 }
 
 void AssertManager::exitFunction(string formatted_string) {
   //printf("Exit function called!\n");
   string var_key = AssertManager::getVariableKey(formatted_string);
-  AssertManager::instrumented_variables[var_key]->newValue(formatted_string, 1);
+  
+  map_mutex.lock();
+  auto var_it = AssertManager::instrumented_variables.find(var_key);
+  Variable* var_ptr = var_it->second;
+  map_mutex.unlock();
+  
+  var_ptr->newValue(formatted_string, 1);
+  if (!var_ptr->isOk()) {
+    //printf("Assertion failed!\n");
+    OutputLogger::failedAssertion(var_key, var_ptr);
+  }
 }

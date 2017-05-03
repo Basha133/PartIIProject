@@ -22,17 +22,20 @@ string TimingFractVariable::getStatusMessage() {
   if (ok) {
     return "OK";
   }
+  data_mutex.lock();
   string res = to_string(fract) + " of time this function should take les than "
       + to_string(target_time) + "us, but it only did so in "
       + to_string((float)running_count/(float)window_size);
+  data_mutex.unlock();
   return res;
 }
 
 void TimingFractVariable::newValue(const string& formatted_string, long long x) {
   timeval tv;
   gettimeofday(&tv, 0);
-  //printf("Got a new value!\n");
   //printf("My stats: target time: %d, fract: %f, window: %d\n",target_time, fract, window_size);
+
+  data_mutex.lock();
   if (x) {
     //printf("It is exit from the function.\n");
     if (funct_started.empty()) {
@@ -63,4 +66,5 @@ void TimingFractVariable::newValue(const string& formatted_string, long long x) 
     //printf("It is entry to the function\n");
     funct_started.push_back(tv);
   }
+  data_mutex.unlock();
 }

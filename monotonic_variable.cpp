@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <string>
+#include <mutex>
 #include "monotonic_variable.h"
 
 using namespace std;
@@ -18,11 +19,14 @@ string MonotonicVariable::getStatusMessage() {
   if (ok) {
     return "OK";
   }
+  last_value_mutex.lock();
   string res = string("Should be monotonically ") + (inc?"increasing":"decreasing") + " but last two values were " + to_string(before_last_value) + " and " + to_string(last_value);
+  last_value_mutex.unlock();
   return res;
 }
 
 void MonotonicVariable::newValue(const string& formatted_string, long long x) {
+  last_value_mutex.lock();
   if (!initialised) {
     initialised = true;
     last_value = x;
@@ -40,4 +44,5 @@ void MonotonicVariable::newValue(const string& formatted_string, long long x) {
   }
   before_last_value = last_value;
   last_value = x;
+  last_value_mutex.unlock();
 }

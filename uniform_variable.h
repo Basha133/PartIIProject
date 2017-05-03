@@ -1,5 +1,6 @@
 #include <deque>
 #include <vector>
+#include <mutex>
 #include "variable.h"
 
 #ifndef UNIFORM_VARIABLE_H
@@ -16,6 +17,7 @@ class UniformVariable : public Variable {
   double expected_count;
   std::deque<int> bin_num;
   std::vector<int> bins;
+  std::mutex data_mutex;
  public:
   void newValue(const std::string& formatted_string, long long value);
   bool isOk();

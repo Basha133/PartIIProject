@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <mutex>
 #include <string>
 #include "frequency_variable.h"
 #include "common_util.h"
@@ -37,10 +38,12 @@ string FrequencyVariable::getStatusMessage() {
   if (ok) {
     return "OK";
   }
+  data_mutex.lock();
   string res = string("Should have frequency of calls to ")
     + desired_call + " " + (more_than?"more than ":"less than ")
     + to_string(freq) + " but actually has frequency "
     + to_string(((float)running_count/(float)window_size));
+  data_mutex.unlock();
   return res;
 }
 
@@ -49,6 +52,8 @@ void FrequencyVariable::newValue(const string& formatted_string, long long x) {
   //value_name, ta_assert, assert_type, group_str, (opt from here) freq_str, more_than_str, window_size_str
   string value_name = Util::partSubstring(formatted_string, parts[0]); 
   
+  data_mutex.lock();
+
   int curr_id = getIdFromName(value_name);
   values.push_back(curr_id);
   if (curr_id == 0) {
@@ -69,4 +74,6 @@ void FrequencyVariable::newValue(const string& formatted_string, long long x) {
       ok = !ok;
     }
   }
+
+  data_mutex.unlock();
 }

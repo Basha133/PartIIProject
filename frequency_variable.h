@@ -1,5 +1,6 @@
 #include <deque>
 #include <map>
+#include <mutex>
 #include <string>
 #include "variable.h"
 
@@ -19,6 +20,7 @@ class FrequencyVariable : public Variable {
   std::deque<int> values;
   bool ok;
   int running_count;
+  std::mutex data_mutex;
 
   int getIdFromName(const std::string& call_name);
  public:

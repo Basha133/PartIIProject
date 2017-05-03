@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <string>
+#include <mutex>
 #include <sys/time.h>
 #include "common_util.h"
 #include "timing_mean_variable.h"
@@ -21,17 +22,19 @@ string TimingMeanVariable::getStatusMessage() {
   if (ok) {
     return "OK";
   }
+  data_mutex.lock();
   string res = string("On average (mean) this function should take les than ")
     + to_string(target_time) + "us, but it did take " + to_string(running_mean)
     + "us on average over the last " + to_string(window_size) + " runs.";
+  data_mutex.unlock();
   return res;
 }
 
 void TimingMeanVariable::newValue(const string& formatted_string, long long x) {
   timeval tv;
   gettimeofday(&tv, 0);
-  //printf("Got a new value!\n");
   //printf("My stats: target time: %d, window: %d\n",target_time, window_size);
+  data_mutex.lock();
   if (x) {
     //generic time gathering stuff
     //printf("It is exit from the function.\n");
@@ -62,4 +65,5 @@ void TimingMeanVariable::newValue(const string& formatted_string, long long x) {
     //printf("It is entry to the function\n");
     funct_started.push_back(tv);
   }
+  data_mutex.unlock();
 }

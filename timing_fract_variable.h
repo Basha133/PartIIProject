@@ -1,5 +1,6 @@
 #include <deque>
 #include <vector>
+#include <mutex>
 #include <sys/time.h>
 #include "variable.h"
 
@@ -17,6 +18,7 @@ class TimingFractVariable : public Variable {
   double expected_count;
   std::deque<timeval> funct_started;
   std::deque<int> measured_times;
+  std::mutex data_mutex;
  public:
   void newValue(const std::string& formatted_string, long long value);
   bool isOk();

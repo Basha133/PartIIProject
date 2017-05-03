@@ -2,6 +2,7 @@
 #define ASSERT_MANAGER_H
 
 #include <map>
+#include <mutex>
 #include <string>
 
 #include "variable.h"
@@ -11,6 +12,7 @@ class AssertManager {
 
  public:
   static std::map<std::string, Variable*> instrumented_variables;
+  static std::mutex map_mutex;
 
   AssertManager();
   static void newValue(std::string formatted_string, int value);
