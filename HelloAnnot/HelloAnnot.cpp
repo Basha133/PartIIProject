@@ -68,9 +68,9 @@ string getFunctFreqParams(const string& formatted_string) {
   return formatted_string.substr(parts[3].first);
 }
 
-struct Hello : public ModulePass {
+struct PolicyGenerator : public ModulePass {
   static char ID;
-  Hello() : ModulePass(ID) {}
+  PolicyGenerator() : ModulePass(ID) {}
 
   bool runOnModule(Module &M) override {
     ifstream loom_inst_basic_policy;
@@ -228,10 +228,10 @@ struct Hello : public ModulePass {
     //stuff_to_instrument.close();
     return false;
   }
-}; // end of struct Hello
+}; // end of struct PolicyGenerator
 }  // end of anonymous namespace
 
-char Hello::ID = 0;
-static RegisterPass<Hello> X("hello_annot", "Generates policies fro Loom and adds som annotations",
+char PolicyGenerator::ID = 0;
+static RegisterPass<PolicyGenerator> X("hello_annot", "Generates policies fro Loom and adds som annotations",
                              false /* Only looks at CFG */,
                              false /* Analysis Pass */);
