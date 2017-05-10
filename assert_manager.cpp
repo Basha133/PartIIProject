@@ -56,10 +56,12 @@ Variable* AssertManager::makeVariable(string formatted_string) {
   
   if (Util::partStringEqual(formatted_string, assert_type, "arg_monotonic")) {
     //printf("makeVariable: new MonotonicVariable.\n");
-    bool inc;
+    bool inc, strict;
     pair<int, int> inc_str = parts[4];
+    pair<int, int> strict_str = parts[5];
     inc = Util::partStringEqual(formatted_string, inc_str, "1");
-    return new MonotonicVariable(inc);
+    strict = Util::partStringEqual(formatted_string, strict_str, "1");
+    return new MonotonicVariable(inc, strict);
   } else if (Util::partStringEqual(formatted_string, assert_type, "group") || Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
     //printf("makeVariable: new FrequencyVariable.\n");
     string desired_call;

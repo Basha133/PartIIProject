@@ -1032,7 +1032,7 @@ stopit(int sig __unused)
 
 #include "../../ta_macros.h"
 #include "../../assert_manager_clib.h"
-void icp_set_seq(struct icmp *icp, int seq_num) TA_ARG_MONOTONIC(1, 1)
+void icp_set_seq(struct icmp *icp, int seq_num) TA_ARG_MONOTONIC(1, 1, 1)
 {
 	
 	icp->icmp_seq = htons(seq_num);
@@ -1105,6 +1105,7 @@ pinger(void)
 			     hostname, i, cc);
 		}
 	}
+	//The line bellow can be commented out to see a failing assertion:
 	ntransmitted++;
 	sntransmitted++;
 	if (!(options & F_QUIET) && options & F_FLOOD)

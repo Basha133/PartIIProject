@@ -13,6 +13,6 @@ void bar() {
 int main() {
   foo(42);
   foo(47);
-  foo(5);
+  foo(47);
   return 0;
 }

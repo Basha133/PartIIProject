@@ -8,6 +8,7 @@
 class MonotonicVariable : public Variable {
  private:
   bool inc;
+  bool strict;
   int last_value;
   int before_last_value;
   bool initialised;
@@ -17,7 +18,7 @@ class MonotonicVariable : public Variable {
   void newValue(const std::string& formatted_string, long long value);
   bool isOk();
   std::string getStatusMessage();
-  MonotonicVariable(bool inc);
+  MonotonicVariable(bool inc, bool strict);
 };
 
 #endif
