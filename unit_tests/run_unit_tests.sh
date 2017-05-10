@@ -5,4 +5,5 @@
 ./freq_unit_test
 ./timing_fract_unit_test
 ./timing_mean_unit_test
+./absolute_freq_unit_test
 

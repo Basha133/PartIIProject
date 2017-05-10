@@ -10,3 +10,5 @@ clang++ -o timing_fract_unit_test ../timing_fract_variable.cpp ../variable.cpp .
 
 clang++ -o timing_mean_unit_test ../timing_mean_variable.cpp ../variable.cpp ../common_util.cpp timing_mean_unit_test.cpp
 
+clang++ -o absolute_freq_unit_test ../absolute_frequency_variable.cpp ../variable.cpp ../common_util.cpp absolute_freq_unit_test.cpp
+
