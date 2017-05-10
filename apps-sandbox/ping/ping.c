@@ -227,6 +227,19 @@ static void stopit(int);
 static void tvsub(struct timeval *, const struct timeval *);
 static void usage(void) __dead2;
 
+#include "../../ta_macros.h"
+#include "../../assert_manager_clib.h"
+
+/*
+ * run_select --
+ *     function added to facilitate assertions
+ */
+void run_select(fd_set *rfds, struct timeval *timeout, int *n) TA_TIMING_MEAN(1020000, 10)
+{
+	//printf("run_select: timeout: %ld %ld\n", timeout->tv_sec, timeout->tv_usec);
+	*n = select(srecv + 1, rfds, NULL, NULL, timeout);
+}
+
 int
 main(int argc, char *const *argv)
 {
@@ -908,6 +921,7 @@ main(int argc, char *const *argv)
 		intvl.tv_usec = interval % 1000 * 1000;
 	}
 
+	int prev_n = 0;
 	almost_done = 0;
 	while (!finish_up) {
 		struct timeval now, timeout;
@@ -932,7 +946,13 @@ main(int argc, char *const *argv)
 		}
 		if (timeout.tv_sec < 0)
 			timerclear(&timeout);
-		n = select(srecv + 1, &rfds, NULL, NULL, &timeout);
+		if (prev_n == 0) {
+			n = select(srecv + 1, &rfds, NULL, NULL, &timeout);
+		} else {
+			run_select(&rfds, &timeout, &n);
+		}
+		prev_n = n;
+		
 		if (n < 0)
 			continue;	/* Must be EINTR. */
 		if (n == 1) {
@@ -1029,9 +1049,6 @@ stopit(int sig __unused)
  * icp_set_seq --
  *      Helpel function introduced to test temporal assertions.
  */
-
-#include "../../ta_macros.h"
-#include "../../assert_manager_clib.h"
 void icp_set_seq(struct icmp *icp, int seq_num) TA_ARG_MONOTONIC(1, 1, 1)
 {
 	
