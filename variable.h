@@ -9,7 +9,8 @@ enum distribution {
   dist_freq = 1,
   dist_uniform = 2,
   dist_timing_fract = 3,
-  dist_timing_mean = 4
+  dist_timing_mean = 4,
+  dist_absolute_frequency = 5
 };
 
 class Variable {

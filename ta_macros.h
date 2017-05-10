@@ -15,6 +15,8 @@
 
 #define TA_TIMING_MEAN(target_time, window) __attribute__((annotate("TA_ASSERT:timing_mean:" STRINGIFY(target_time) ":" STRINGIFY(window))))
 
+#define TA_ABSOLUTE_FREQUENCY(target_time, window) __attribute__((annotate("TA_ASSERT:absolute_freq:" STRINGIFY(target_time) ":" STRINGIFY(window))))
+
 //can't do this
 /*char* TA_make_string_monotonic(int arg_num, int inc) {
   char res[100];

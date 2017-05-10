@@ -7,6 +7,7 @@
 #include "variable.h"
 #include "output_logger.h"
 #include "frequency_variable.h"
+#include "absolute_frequency_variable.h"
 #include "monotonic_variable.h"
 #include "uniform_variable.h"
 #include "timing_fract_variable.h"
@@ -40,7 +41,7 @@ string AssertManager::getVariableKey(string formatted_string) {
     res += Util::partSubstring(formatted_string, parts[3]);
   } else if (Util::partStringEqual(formatted_string, assert_type, "group") || Util::partStringEqual(formatted_string, assert_type, "call_freq")) {
     res = Util::partSubstring(formatted_string, parts[3]);
-  } else if (Util::partStringEqual(formatted_string, assert_type, "timing_fract") || Util::partStringEqual(formatted_string, assert_type, "timing_mean")) {
+  } else if (Util::partStringEqual(formatted_string, assert_type, "timing_fract") || Util::partStringEqual(formatted_string, assert_type, "timing_mean") || Util::partStringEqual(formatted_string, assert_type, "absolute_freq")) {
     //just name is fine
   } else {
     printf("Unrecognised assertion type: %s\n", Util::partSubstring(formatted_string, assert_type).c_str());
@@ -102,6 +103,13 @@ Variable* AssertManager::makeVariable(string formatted_string) {
     int target_time = atoi(target_time_str.c_str());
     int window_size = atoi(window_size_str.c_str());
     return new TimingMeanVariable(target_time, window_size);
+  } else if (Util::partStringEqual(formatted_string, assert_type, "absolute_freq")) {
+    //printf("makeVariable: new AbsoluteFrequencyVariable.\n");
+    string target_time_str = Util::partSubstring(formatted_string, parts[3]);
+    string window_size_str = Util::partSubstring(formatted_string, parts[4]);
+    int target_time = atoi(target_time_str.c_str());
+    int window_size = atoi(window_size_str.c_str());
+    return new AbsoluteFrequencyVariable(target_time, window_size);
   } else {
     printf("Unrecognised assertion type: %s\n", Util::partSubstring(formatted_string, assert_type).c_str());
   }
