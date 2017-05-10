@@ -7,7 +7,7 @@
 
 #define TA_CALL_GROUP(group) __attribute__((annotate(("TA_ASSERT:group:" STRINGIFY(group)))))
 
-#define TA_ARG_MONOTONIC(arg_num, inc) __attribute__((annotate("TA_ASSERT:arg_monotonic:" STRINGIFY(arg_num) ":" STRINGIFY(inc))))
+#define TA_ARG_MONOTONIC(arg_num, inc, strict) __attribute__((annotate("TA_ASSERT:arg_monotonic:" STRINGIFY(arg_num) ":" STRINGIFY(inc) ":" STRINGIFY(strict))))
 
 #define TA_ARG_UNIFORM(arg_num, min, max, window) __attribute__((annotate("TA_ASSERT:arg_uniform:" STRINGIFY(arg_num) ":" STRINGIFY(min) ":" STRINGIFY(max) ":" STRINGIFY(window))))
 

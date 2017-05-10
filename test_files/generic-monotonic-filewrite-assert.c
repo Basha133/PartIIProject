@@ -6,7 +6,7 @@
 #include "../ta_macros.h"
 #include "../assert_manager_clib.h"
 
-void foo(int x) TA_ARG_MONOTONIC(0, 1) {
+void foo(int x) TA_ARG_MONOTONIC(0, 1, 0) {
   volatile int res;
   FILE * output_file;
   output_file = fopen ("dummy.txt","w");

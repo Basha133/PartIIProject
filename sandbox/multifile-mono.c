@@ -4,7 +4,7 @@
 
 #include "multifile-mono.h"
 
-void foo(int x) TA_ARG_MONOTONIC(0, 1) {
+void foo(int x) TA_ARG_MONOTONIC(0, 1, 1) {
   printf("foo does something%d\n",x);
 }
 

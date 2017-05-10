@@ -6,7 +6,7 @@
 #include "../ta_macros.h"
 #include "../assert_manager_clib.h"
 
-void foo(int x) TA_ARG_MONOTONIC(0, 1) {
+void foo(int x) TA_ARG_MONOTONIC(0, 1, 0) {
   volatile int res;
   for (int i=0; i<x; i++) {
     res+=i;
