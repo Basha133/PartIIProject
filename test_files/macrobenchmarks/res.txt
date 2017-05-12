@@ -1,0 +1,13 @@
+generic-monotonic-no-assert
+21159
+generic-freq-no-assert
+50825
+generic-monotonic-assert
+685725
+generic-freq-assert
+2779527
+generic-timing-fract-assert
+1626471
+generic-timing-mean-assert
+1630072
+
