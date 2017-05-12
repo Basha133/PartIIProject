@@ -1,13 +1,15 @@
 generic-monotonic-no-assert
-21159
+63474
 generic-freq-no-assert
-50825
+50750
 generic-monotonic-assert
-685725
+685773
+generic-uniform-assert
+774888
 generic-freq-assert
-2779527
+2778057
 generic-timing-fract-assert
-1626471
+1634737
 generic-timing-mean-assert
-1630072
+1629365
 

@@ -7,7 +7,7 @@
 #include "../../assert_manager_clib.h"
 #include "timeval_util.h"
 
-void foo(int x) TA_ARG_UNIFORM(1, 0, 99, 100) {
+void foo(int x, int y) TA_ARG_UNIFORM(1, 0, 99, 100) {
   volatile int res;
   for (int i=0; i<x; i++) {
     res+=i;
@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
   int n = atoi(argv[1]);
   int k = atoi(argv[2]);
   for (int i=0; i<n; i++) {
-    foo(k);
+    foo(k, i%100);
   }
 
   gettimeofday(&finish_tv, 0);
