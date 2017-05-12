@@ -82,7 +82,6 @@ struct PolicyGenerator : public ModulePass {
 
     char c;
     //Copy base of our loom policy into a new loom policy
-    //No longer used, since multiple passes add info to the same policy
     while (!loom_inst_basic_policy.eof()) {
       loom_inst_basic_policy.get(c);
       loom_inst_policy << c;
@@ -96,6 +95,7 @@ struct PolicyGenerator : public ModulePass {
     map<string, string> group_to_param;
 
     //Look through global constants to look for function annotations
+    //Thanks for a blogpost that mentioned this method for retrieving them goes to B. Holt (http://bholt.org/posts/llvm-quick-tricks.html)
     auto global_annos = M.getNamedGlobal("llvm.global.annotations");
     if (global_annos) {
       auto a = cast<ConstantArray>(global_annos->getOperand(0));
