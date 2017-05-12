@@ -6,14 +6,7 @@
 #include "../ta_macros.h"
 #include "../assert_manager_clib.h"
 
-void foo(int x) TA_CALL_FREQUENCY("group_a", 0.6, 1, 3900) {
-  volatile int res;
-  for (int i=0; i<x; i++) {
-    res+=i;
-  }
-}
-
-void bar(int x) TA_CALL_GROUP("group_a") {
+void foo(int x, int y) TA_ARG_UNIFORM(1, 0, 99, 3900) {
   volatile int res;
   for (int i=0; i<x; i++) {
     res+=i;
@@ -50,9 +43,7 @@ int main(int argc, char** argv) {
   int n = atoi(argv[2]);
   int k = atoi(argv[3]);
   for (int i=0; i<n; i++) {
-    foo(k);
-    foo(k);
-    bar(k);
+    foo(k, i%100);
   }
 
   if (pmc_read(pmcid, &finish) < 0) {
