@@ -4,5 +4,7 @@ logging: none
 
 functions:
 
+
+functions:
     - name: foo
-      caller: [ entry ]
+      callee: [ entry, exit ]
