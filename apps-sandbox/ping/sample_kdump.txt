@@ -1,0 +1,174 @@
+ 59025 ping-kqueue 0.000000 RET   kevent 0
+ 59025 ping-kqueue 0.000035 CALL  sendto(0x3,0x607c24,0x40,0,0,0)
+ 59025 ping-kqueue 0.000050 GIO   fd 3 wrote 64 bytes
+       0x0000 0800 1f8e 91e6 0007 5917 6f9a 000a 92c5  |........Y.o.....|
+       0x0010 0809 0a0b 0c0d 0e0f 1011 1213 1415 1617  |................|
+       0x0020 1819 1a1b 1c1d 1e1f 2021 2223 2425 2627  |........ !"#$%&'|
+       0x0030 2829 2a2b 2c2d 2e2f 3031 3233 3435 3637  |()*+,-./01234567|
+ 59025 ping-kqueue 0.000054 RET   sendto 64/0x40
+ 59025 ping-kqueue 0.000057 CALL  kqueue
+ 59025 ping-kqueue 0.000061 RET   kqueue 19/0x13
+ 59025 ping-kqueue 0.000064 CALL  kevent(0x13,0x7fffffffe800,0x1,0,0,0)
+ 59025 ping-kqueue 0.000071 GIO   fd 19 wrote 32 bytes
+       0x0000 0400 0000 0000 0000 ffff 0100 0000 0000  |................|
+       0x0010 0000 0000 0000 0000 0000 0000 0000 0000  |................|
+ 59025 ping-kqueue 0.000074 GIO   fd 19 read 0 bytes
+       ""
+ 59025 ping-kqueue 0.000076 RET   kevent 0
+ 59025 ping-kqueue 0.000079 CALL  kevent(0x13,0,0,0x7fffffffe7d0,0x1,0x7fffffffe908)
+ 59025 ping-kqueue 0.000083 GIO   fd 19 wrote 0 bytes
+       ""
+ 59025 ping-kqueue 0.000086 GIO   fd 19 read 32 bytes
+       0x0000 0400 0000 0000 0000 ffff 0000 0000 0000  |................|
+       0x0010 5400 0000 0000 0000 0000 0000 0000 0000  |T...............|
+ 59025 ping-kqueue 0.000088 RET   kevent 1
+ 59025 ping-kqueue 0.000091 CALL  recvmsg(0x4,0x7fffffffe880,0)
+ 59025 ping-kqueue 0.000097 GIO   fd 4 read 84 bytes
+       0x0000 4500 0054 c08b 0000 4001 0000 7f00 0001  |E..T....@.......|
+       0x0010 7f00 0001 0000 278e 91e6 0007 5917 6f9a  |......'.....Y.o.|
+       0x0020 000a 92c5 0809 0a0b 0c0d 0e0f 1011 1213  |................|
+       0x0030 1415 1617 1819 1a1b 1c1d 1e1f 2021 2223  |............ !"#|
+       0x0040 2425 2627 2829 2a2b 2c2d 2e2f 3031 3233  |$%&'()*+,-./0123|
+       0x0050 3435 3637                                |4567|
+
+ 59025 ping-kqueue 0.000100 STRU  struct sockaddr { AF_INET, 127.0.0.1:0 }
+ 59025 ping-kqueue 0.000103 RET   recvmsg 84/0x54
+ 59025 ping-kqueue 0.000106 CALL  kqueue
+ 59025 ping-kqueue 0.000109 RET   kqueue 20/0x14
+ 59025 ping-kqueue 0.000111 CALL  kevent(0x14,0x7fffffffe800,0x1,0,0,0)
+ 59025 ping-kqueue 0.000116 GIO   fd 20 wrote 32 bytes
+       0x0000 0400 0000 0000 0000 ffff 0100 0000 0000  |................|
+       0x0010 0000 0000 0000 0000 0000 0000 0000 0000  |................|
+ 59025 ping-kqueue 0.000118 GIO   fd 20 read 0 bytes
+       ""
+ 59025 ping-kqueue 0.000121 RET   kevent 0
+ 59025 ping-kqueue 0.000135 CALL  kevent(0x14,0,0,0x7fffffffe7d0,0x1,0x7fffffffe908)
+ 59025 ping-kqueue 1.063444 GIO   fd 20 wrote 0 bytes
+       ""
+ 59025 ping-kqueue 1.063452 GIO   fd 20 read 0 bytes
+       ""
+ 59025 ping-kqueue 1.063455 RET   kevent 0
+ 59025 ping-kqueue 1.063486 CALL  sendto(0x3,0x607c24,0x40,0,0,0)
+ 59025 ping-kqueue 1.063500 GIO   fd 3 wrote 64 bytes
+       0x0000 0800 27af 91e6 0008 5917 6f9b 000b 8aa1  |..'.....Y.o.....|
+       0x0010 0809 0a0b 0c0d 0e0f 1011 1213 1415 1617  |................|
+       0x0020 1819 1a1b 1c1d 1e1f 2021 2223 2425 2627  |........ !"#$%&'|
+       0x0030 2829 2a2b 2c2d 2e2f 3031 3233 3435 3637  |()*+,-./01234567|
+ 59025 ping-kqueue 1.063503 RET   sendto 64/0x40
+ 59025 ping-kqueue 1.063506 CALL  kqueue
+ 59025 ping-kqueue 1.063510 RET   kqueue 21/0x15
+ 59025 ping-kqueue 1.063513 CALL  kevent(0x15,0x7fffffffe800,0x1,0,0,0)
+ 59025 ping-kqueue 1.063520 GIO   fd 21 wrote 32 bytes
+       0x0000 0400 0000 0000 0000 ffff 0100 0000 0000  |................|
+       0x0010 0000 0000 0000 0000 0000 0000 0000 0000  |................|
+ 59025 ping-kqueue 1.063523 GIO   fd 21 read 0 bytes
+       ""
+ 59025 ping-kqueue 1.063525 RET   kevent 0
+ 59025 ping-kqueue 1.063528 CALL  kevent(0x15,0,0,0x7fffffffe7d0,0x1,0x7fffffffe908)
+ 59025 ping-kqueue 1.063534 GIO   fd 21 wrote 0 bytes
+       ""
+ 59025 ping-kqueue 1.063537 GIO   fd 21 read 32 bytes
+       0x0000 0400 0000 0000 0000 ffff 0000 0000 0000  |................|
+       0x0010 5400 0000 0000 0000 0000 0000 0000 0000  |T...............|
+ 59025 ping-kqueue 1.063539 RET   kevent 1
+ 59025 ping-kqueue 1.063542 CALL  recvmsg(0x4,0x7fffffffe880,0)
+ 59025 ping-kqueue 1.063547 GIO   fd 4 read 84 bytes
+       0x0000 4500 0054 c08c 0000 4001 0000 7f00 0001  |E..T....@.......|
+       0x0010 7f00 0001 0000 2faf 91e6 0008 5917 6f9b  |....../.....Y.o.|
+       0x0020 000b 8aa1 0809 0a0b 0c0d 0e0f 1011 1213  |................|
+       0x0030 1415 1617 1819 1a1b 1c1d 1e1f 2021 2223  |............ !"#|
+       0x0040 2425 2627 2829 2a2b 2c2d 2e2f 3031 3233  |$%&'()*+,-./0123|
+       0x0050 3435 3637                                |4567|
+
+ 59025 ping-kqueue 1.063550 STRU  struct sockaddr { AF_INET, 127.0.0.1:0 }
+ 59025 ping-kqueue 1.063553 RET   recvmsg 84/0x54
+ 59025 ping-kqueue 1.063556 CALL  kqueue
+ 59025 ping-kqueue 1.063559 RET   kqueue 22/0x16
+ 59025 ping-kqueue 1.063579 CALL  kevent(0x16,0x7fffffffe800,0x1,0,0,0)
+ 59025 ping-kqueue 1.063584 GIO   fd 22 wrote 32 bytes
+       0x0000 0400 0000 0000 0000 ffff 0100 0000 0000  |................|
+       0x0010 0000 0000 0000 0000 0000 0000 0000 0000  |................|
+ 59025 ping-kqueue 1.063588 GIO   fd 22 read 0 bytes
+       ""
+ 59025 ping-kqueue 1.063590 RET   kevent 0
+ 59025 ping-kqueue 1.063605 CALL  kevent(0x16,0,0,0x7fffffffe7d0,0x1,0x7fffffffe908)
+ 59025 ping-kqueue 2.126979 GIO   fd 22 wrote 0 bytes
+       ""
+ 59025 ping-kqueue 2.126987 GIO   fd 22 read 0 bytes
+       ""
+ 59025 ping-kqueue 2.126989 RET   kevent 0
+ 59025 ping-kqueue 2.127020 CALL  sendto(0x3,0x607c24,0x40,0,0,0)
+ 59025 ping-kqueue 2.127033 GIO   fd 3 wrote 64 bytes
+       0x0000 0800 2f7e 91e6 0009 5917 6f9c 000c 82cf  |../~....Y.o.....|
+       0x0010 0809 0a0b 0c0d 0e0f 1011 1213 1415 1617  |................|
+       0x0020 1819 1a1b 1c1d 1e1f 2021 2223 2425 2627  |........ !"#$%&'|
+       0x0030 2829 2a2b 2c2d 2e2f 3031 3233 3435 3637  |()*+,-./01234567|
+ 59025 ping-kqueue 2.127037 RET   sendto 64/0x40
+ 59025 ping-kqueue 2.127040 CALL  kqueue
+ 59025 ping-kqueue 2.127044 RET   kqueue 23/0x17
+ 59025 ping-kqueue 2.127047 CALL  kevent(0x17,0x7fffffffe800,0x1,0,0,0)
+ 59025 ping-kqueue 2.127053 GIO   fd 23 wrote 32 bytes
+       0x0000 0400 0000 0000 0000 ffff 0100 0000 0000  |................|
+       0x0010 0000 0000 0000 0000 0000 0000 0000 0000  |................|
+ 59025 ping-kqueue 2.127056 GIO   fd 23 read 0 bytes
+       ""
+ 59025 ping-kqueue 2.127058 RET   kevent 0
+ 59025 ping-kqueue 2.127061 CALL  kevent(0x17,0,0,0x7fffffffe7d0,0x1,0x7fffffffe908)
+ 59025 ping-kqueue 2.127066 GIO   fd 23 wrote 0 bytes
+       ""
+ 59025 ping-kqueue 2.127069 GIO   fd 23 read 32 bytes
+       0x0000 0400 0000 0000 0000 ffff 0000 0000 0000  |................|
+       0x0010 5400 0000 0000 0000 0000 0000 0000 0000  |T...............|
+ 59025 ping-kqueue 2.127071 RET   kevent 1
+ 59025 ping-kqueue 2.127074 CALL  recvmsg(0x4,0x7fffffffe880,0)
+ 59025 ping-kqueue 2.127079 GIO   fd 4 read 84 bytes
+       0x0000 4500 0054 c08d 0000 4001 0000 7f00 0001  |E..T....@.......|
+       0x0010 7f00 0001 0000 377e 91e6 0009 5917 6f9c  |......7~....Y.o.|
+       0x0020 000c 82cf 0809 0a0b 0c0d 0e0f 1011 1213  |................|
+       0x0030 1415 1617 1819 1a1b 1c1d 1e1f 2021 2223  |............ !"#|
+       0x0040 2425 2627 2829 2a2b 2c2d 2e2f 3031 3233  |$%&'()*+,-./0123|
+       0x0050 3435 3637                                |4567|
+
+ 59025 ping-kqueue 2.127083 STRU  struct sockaddr { AF_INET, 127.0.0.1:0 }
+ 59025 ping-kqueue 2.127086 RET   recvmsg 84/0x54
+ 59025 ping-kqueue 2.127088 CALL  kqueue
+ 59025 ping-kqueue 2.127091 RET   kqueue 24/0x18
+ 59025 ping-kqueue 2.127094 CALL  kevent(0x18,0x7fffffffe800,0x1,0,0,0)
+ 59025 ping-kqueue 2.127099 GIO   fd 24 wrote 32 bytes
+       0x0000 0400 0000 0000 0000 ffff 0100 0000 0000  |................|
+       0x0010 0000 0000 0000 0000 0000 0000 0000 0000  |................|
+ 59025 ping-kqueue 2.127101 GIO   fd 24 read 0 bytes
+       ""
+ 59025 ping-kqueue 2.127104 RET   kevent 0
+ 59025 ping-kqueue 2.127118 CALL  kevent(0x18,0,0,0x7fffffffe7d0,0x1,0x7fffffffe908)
+ 59025 ping-kqueue 3.190439 GIO   fd 24 wrote 0 bytes
+       ""
+ 59025 ping-kqueue 3.190454 GIO   fd 24 read 0 bytes
+       ""
+ 59025 ping-kqueue 3.190458 RET   kevent 0
+ 59025 ping-kqueue 3.190513 CALL  write(0x1,0x801e16000,0x24)
+ 59025 ping-kqueue 3.190536 GIO   fd 1 wrote 36 bytes
+       "Temporal assertion failed! Details:
+       "
+ 59025 ping-kqueue 3.190541 RET   write 36/0x24
+ 59025 ping-kqueue 3.190614 CALL  write(0x1,0x801e16000,0x8f)
+ 59025 ping-kqueue 3.190618 GIO   fd 1 wrote 143 bytes
+       "run_kevent: On average (mean) this function should take les than 10200\
+	00us, but it did take 1051904.300000us on average over the last 10 run\
+	s.
+       "
+ 59025 ping-kqueue 3.190619 RET   write 143/0x8f
+ 59025 ping-kqueue 3.190624 CALL  write(0x2,0x7ffffffedc00,0x89)
+ 59025 ping-kqueue 3.190626 GIO   fd 2 wrote 137 bytes
+       "Assertion failed: (("Aborted because of failed temporal assertion.", f\
+	alse)), function failedAssertion, file output_logger.cpp, line 32.
+       "
+ 59025 ping-kqueue 3.190627 RET   write 137/0x89
+ 59025 ping-kqueue 3.190633 CALL  sigprocmask(SIG_SETMASK,0x7ffffffee294,0)
+ 59025 ping-kqueue 3.190635 RET   sigprocmask 0
+ 59025 ping-kqueue 3.190648 CALL  thr_self(0x7ffffffee250)
+ 59025 ping-kqueue 3.190650 RET   thr_self 0
+ 59025 ping-kqueue 3.190651 CALL  thr_kill(0x18892,SIGIOT)
+ 59025 ping-kqueue 3.190655 RET   thr_kill 0
+ 59025 ping-kqueue 3.190658 PSIG  SIGIOT SIG_DFL code=SI_LWP
+ 59025 ping-kqueue 3.190663 NAMI  "ping-kqueue.core"
