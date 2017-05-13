@@ -16,7 +16,7 @@ do
 
     ./build_test_assert.sh ${6}-window-instance
 
-    test_files/generic-call-freq-window-instance "$pmc" ${4} ${5}
+    test_files/${6}-window-instance "$pmc" ${4} ${5}
   done
   echo ""
 done
