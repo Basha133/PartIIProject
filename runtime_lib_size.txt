@@ -1,0 +1,3 @@
+-rwxr-xr-x  1 test  staff   203611 May 12 00:20 libassert_manager.so
+-rwxr-xr-x  1 test  staff     9782 May 12 00:20 libassert_manager_clib.so
+
